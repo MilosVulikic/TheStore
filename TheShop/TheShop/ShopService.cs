@@ -1,7 +1,8 @@
 ﻿using System;
 using TheShop.Suppliers;
 using TheShop.Utilities;
-using TheShop.DAL;
+using TheShop.DAL.Models;
+using TheShop.DAL.Repositories;
 
 namespace TheShop
 {

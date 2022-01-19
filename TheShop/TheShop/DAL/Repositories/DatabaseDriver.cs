@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TheShop.DAL.Models;
+using TheShop.DAL.Interfaces;
 
-namespace TheShop.DAL
+namespace TheShop.DAL.Repositories
 {
 	//in memory implementation
-	public class DatabaseDriver
+	public class DatabaseDriver : IArticleRepository
 	{
 		private List<Article> _articles = new List<Article>();
 

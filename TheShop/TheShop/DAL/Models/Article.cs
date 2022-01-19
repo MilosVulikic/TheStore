@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TheShop
+namespace TheShop.DAL.Models
 {
 	public class Article
 	{

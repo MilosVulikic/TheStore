@@ -1,4 +1,6 @@
-﻿namespace TheShop.Suppliers
+﻿using TheShop.DAL.Models;
+
+namespace TheShop.Suppliers
 {
 	public class Supplier3
 	{

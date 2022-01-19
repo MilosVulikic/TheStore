@@ -42,8 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Article.cs" />
-    <Compile Include="DAL\DatabaseDriver.cs" />
+    <Compile Include="DAL\Interfaces\IArticleRepository.cs" />
+    <Compile Include="DAL\Models\Article.cs" />
+    <Compile Include="DAL\Repositories\DatabaseDriver.cs" />
     <Compile Include="Utilities\Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,5 +58,6 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
