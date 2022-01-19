@@ -2,22 +2,32 @@
 using System.Linq;
 using TheShop.DAL.Models;
 using TheShop.DAL.Interfaces;
+using System.Data.Entity;
 
 namespace TheShop.DAL.Repositories
 {
-	//in memory implementation
+
 	public class ArticleRepository : IArticleRepository
 	{
-		private List<Article> _articles = new List<Article>();
+		protected readonly ApplicationDbContext DatabaseContext;
+		protected readonly DbSet<Article> _entities;
+
+		public ArticleRepository()
+		{
+			DatabaseContext = new ApplicationDbContext();
+			_entities = DatabaseContext.Set<Article>();
+		}
 
 		public Article Get(int id)
 		{
-            return _articles.Single(x => x.ID == id);
+			return _entities.FirstOrDefault(s => s.ID == id);
 		}
 
-		public void Save(Article article)
+		public Article Save(Article entity)
 		{
-			_articles.Add(article);
+			var result = _entities.Add(entity);
+			DatabaseContext.SaveChanges();
+			return result;
 		}
 	}
 
