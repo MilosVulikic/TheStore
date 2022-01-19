@@ -1,4 +1,5 @@
 ﻿using System;
+using TheShop.DAL.Repositories;
 using TheShop.Services;
 
 namespace TheShop
@@ -7,7 +8,7 @@ namespace TheShop
 	{
 		private static void Main(string[] args)
 		{
-			var shopService = new ShopService();
+			var shopService = new ShopService(new ArticleRepository());	// until Controller is introduced
 
 			try
 			{

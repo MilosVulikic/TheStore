@@ -4,21 +4,22 @@ using TheShop.Utilities;
 using TheShop.DAL.Models;
 using TheShop.DAL.Repositories;
 using TheShop.Services.Interfaces;
+using TheShop.DAL.Interfaces;
 
 namespace TheShop.Services
 {
 	public class ShopService : IShopService
 	{
-		private ArticleRepository DatabaseDriver;
+		IArticleRepository _articleRepository;
 		private Logger logger;
 
 		private Supplier1 Supplier1;
 		private Supplier2 Supplier2;
 		private Supplier3 Supplier3;
 
-		public ShopService()
+		public ShopService(IArticleRepository articleRepository)
 		{
-			DatabaseDriver = new ArticleRepository();
+			_articleRepository = articleRepository;			
 			logger = new Logger();
 			Supplier1 = new Supplier1();
 			Supplier2 = new Supplier2();
@@ -74,8 +75,8 @@ namespace TheShop.Services
 			article.BuyerUserId = buyerId;
 
 			try
-			{
-				DatabaseDriver.Save(article);
+			{				
+				_articleRepository.Save(article);
 				logger.Info("Article with id=" + id + " is sold.");
 			}
 			catch (ArgumentNullException ex)
@@ -92,7 +93,7 @@ namespace TheShop.Services
 
 		public Article GetById(int id)
 		{
-			return DatabaseDriver.Get(id);
+			return _articleRepository.Get(id);
 		}
 	}
 
