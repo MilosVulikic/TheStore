@@ -7,27 +7,10 @@ using System.Data.Entity;
 namespace TheShop.DAL.Repositories
 {
 
-	public class ArticleRepository : IArticleRepository
+	public class ArticleRepository : BaseRepository<Article>, IArticleRepository
 	{
-		protected readonly ApplicationDbContext DatabaseContext;
-		protected readonly DbSet<Article> _entities;
-
-		public ArticleRepository()
+		public ArticleRepository() : base()
 		{
-			DatabaseContext = new ApplicationDbContext();
-			_entities = DatabaseContext.Set<Article>();
-		}
-
-		public Article Get(int id)
-		{
-			return _entities.FirstOrDefault(s => s.ID == id);
-		}
-
-		public Article Save(Article entity)
-		{
-			var result = _entities.Add(entity);
-			DatabaseContext.SaveChanges();
-			return result;
 		}
 	}
 
