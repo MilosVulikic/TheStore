@@ -1,12 +1,13 @@
 ﻿using System;
-using TheShop.Suppliers;
+using TheShop.Services.Suppliers;
 using TheShop.Utilities;
 using TheShop.DAL.Models;
 using TheShop.DAL.Repositories;
+using TheShop.Services.Interfaces;
 
-namespace TheShop
+namespace TheShop.Services
 {
-	public class ShopService
+	public class ShopService : IShopService
 	{
 		private ArticleRepository DatabaseDriver;
 		private Logger logger;
@@ -14,7 +15,7 @@ namespace TheShop
 		private Supplier1 Supplier1;
 		private Supplier2 Supplier2;
 		private Supplier3 Supplier3;
-		
+
 		public ShopService()
 		{
 			DatabaseDriver = new ArticleRepository();
@@ -55,7 +56,7 @@ namespace TheShop
 					}
 				}
 			}
-			
+
 			article = tempArticle;
 			#endregion
 
@@ -71,7 +72,7 @@ namespace TheShop
 			article.IsSold = true;
 			article.SoldDate = DateTime.Now;
 			article.BuyerUserId = buyerId;
-			
+
 			try
 			{
 				DatabaseDriver.Save(article);

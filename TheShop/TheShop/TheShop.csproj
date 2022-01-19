@@ -57,13 +57,14 @@
     <Compile Include="DAL\Models\Article.cs" />
     <Compile Include="DAL\Repositories\ArticleRepository.cs" />
     <Compile Include="DAL\Repositories\BaseRepository.cs" />
+    <Compile Include="Services\Interfaces\IShopService.cs" />
     <Compile Include="Utilities\Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShopService.cs" />
-    <Compile Include="Suppliers\Supplier1.cs" />
-    <Compile Include="Suppliers\Supplier2.cs" />
-    <Compile Include="Suppliers\Supplier3.cs" />
+    <Compile Include="Services\ShopService.cs" />
+    <Compile Include="Services\Suppliers\Supplier1.cs" />
+    <Compile Include="Services\Suppliers\Supplier2.cs" />
+    <Compile Include="Services\Suppliers\Supplier3.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

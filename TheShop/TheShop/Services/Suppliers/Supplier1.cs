@@ -1,8 +1,8 @@
 ﻿using TheShop.DAL.Models;
 
-namespace TheShop.Suppliers
+namespace TheShop.Services.Suppliers
 {
-	public class Supplier2
+	public class Supplier1
 	{
 		public bool ArticleInInventory(int id)
 		{
@@ -14,8 +14,8 @@ namespace TheShop.Suppliers
 			return new Article()
 			{
 				ID = 1,
-				Name_of_article = "Article from supplier2",
-				ArticlePrice = 459
+				Name_of_article = "Article from supplier1",
+				ArticlePrice = 458
 			};
 		}
 	}

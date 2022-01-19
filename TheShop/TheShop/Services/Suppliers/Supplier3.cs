@@ -1,8 +1,8 @@
 ﻿using TheShop.DAL.Models;
 
-namespace TheShop.Suppliers
+namespace TheShop.Services.Suppliers
 {
-	public class Supplier3
+	public class Supplier3 : ISupplier
 	{
 		public bool ArticleInInventory(int id)
 		{
