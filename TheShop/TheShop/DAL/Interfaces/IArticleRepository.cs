@@ -4,7 +4,7 @@ namespace TheShop.DAL.Interfaces
 {
 	public interface IArticleRepository
 	{
-		Article GetById(int id);
+		Article Get(int id);
 
 		void Save(Article article);		
 	}

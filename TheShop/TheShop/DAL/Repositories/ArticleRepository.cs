@@ -6,11 +6,11 @@ using TheShop.DAL.Interfaces;
 namespace TheShop.DAL.Repositories
 {
 	//in memory implementation
-	public class DatabaseDriver : IArticleRepository
+	public class ArticleRepository : IArticleRepository
 	{
 		private List<Article> _articles = new List<Article>();
 
-		public Article GetById(int id)
+		public Article Get(int id)
 		{
             return _articles.Single(x => x.ID == id);
 		}

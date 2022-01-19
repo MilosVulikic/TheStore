@@ -8,7 +8,7 @@ namespace TheShop
 {
 	public class ShopService
 	{
-		private DatabaseDriver DatabaseDriver;
+		private ArticleRepository DatabaseDriver;
 		private Logger logger;
 
 		private Supplier1 Supplier1;
@@ -17,7 +17,7 @@ namespace TheShop
 		
 		public ShopService()
 		{
-			DatabaseDriver = new DatabaseDriver();
+			DatabaseDriver = new ArticleRepository();
 			logger = new Logger();
 			Supplier1 = new Supplier1();
 			Supplier2 = new Supplier2();
@@ -91,7 +91,7 @@ namespace TheShop
 
 		public Article GetById(int id)
 		{
-			return DatabaseDriver.GetById(id);
+			return DatabaseDriver.Get(id);
 		}
 	}
 
