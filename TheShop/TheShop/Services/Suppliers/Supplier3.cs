@@ -1,4 +1,5 @@
 ﻿using TheShop.DAL.Models;
+using TheShop.Services.Interfaces;
 
 namespace TheShop.Services.Suppliers
 {
