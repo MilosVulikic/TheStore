@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheShop.DAL.Models;
 
 namespace TheShop.DAL.Repositories
@@ -27,8 +24,9 @@ namespace TheShop.DAL.Repositories
 
 		public BaseRepository()
 		{
-			DatabaseContext = new ApplicationDbContext(); //context;
-			_entities = DatabaseContext.Set<T>(); // _entities = context.Set<T>();
+			
+			DatabaseContext = new ApplicationDbContext();
+			_entities = DatabaseContext.Set<T>();
 		}
 
 
