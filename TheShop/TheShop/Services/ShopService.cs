@@ -26,10 +26,15 @@ namespace TheShop.Services
 			Supplier3 = new Supplier3();
 		}
 
-		public void OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId)
-		{
-			#region ordering article
 
+		
+		public Article GetArticle(int id)
+		{
+			return _articleRepository.Get(id);
+		}
+
+		public void OrderArticle(int id, int maxExpectedPrice, int buyerId)
+		{			
 			Article article = null;
 			Article tempArticle = null;
 			var articleExists = Supplier1.ArticleInInventory(id);
@@ -58,11 +63,13 @@ namespace TheShop.Services
 				}
 			}
 
-			article = tempArticle;
-			#endregion
+			// On successfull order:
+			_articleRepository.Save(tempArticle);
+		}
 
-			#region selling article
-
+		public void SellArticle(int id, int maxExpectedPrice, int buyerId)
+		{
+			var article = _articleRepository.Get(id);
 			if (article == null)
 			{
 				throw new Exception("Could not order article");
@@ -75,7 +82,7 @@ namespace TheShop.Services
 			article.BuyerUserId = buyerId;
 
 			try
-			{				
+			{
 				_articleRepository.Save(article);
 				logger.Info("Article with id=" + id + " is sold.");
 			}
@@ -88,12 +95,6 @@ namespace TheShop.Services
 			{
 			}
 
-			#endregion
-		}
-
-		public Article GetById(int id)
-		{
-			return _articleRepository.Get(id);
 		}
 	}
 

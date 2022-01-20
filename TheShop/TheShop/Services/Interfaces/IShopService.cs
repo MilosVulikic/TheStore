@@ -4,7 +4,8 @@ namespace TheShop.Services.Interfaces
 {
 	public interface IShopService
 	{
-		Article GetById(int id);
-		void OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId);
+		Article GetArticle(int id);
+		void OrderArticle(int id, int maxExpectedPrice, int buyerId);
+		void SellArticle(int id, int maxExpectedPrice, int buyerId);
 	}
 }

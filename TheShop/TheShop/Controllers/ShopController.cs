@@ -16,12 +16,19 @@ namespace TheShop.Controllers
 
 		public void OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId)
 		{
-			_shopService.OrderAndSellArticle(id,maxExpectedPrice,buyerId);			
+			var article = _shopService.GetArticle(id);
+			if (article is null)	// article not on stock
+			{				
+				_shopService.OrderArticle(id, maxExpectedPrice, buyerId);
+				// if not found among suppliers... return NULL?
+			}
+			// if finalley exists then
+			_shopService.SellArticle(id,maxExpectedPrice,buyerId);			
 		}
 
 		public Article GetById(int id)
 		{
-			var article = _shopService.GetById(id);
+			var article = _shopService.GetArticle(id);
 			return article;
 		}
 	}
