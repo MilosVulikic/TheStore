@@ -6,27 +6,26 @@ using TheShop.DAL.Repositories;
 using TheShop.Services.Interfaces;
 using TheShop.DAL.Interfaces;
 using System.Collections.Generic;
+using TheShop.Controllers;
 
 namespace TheShop.Services
 {
 	public class ShopService : IShopService
 	{
-		IArticleRepository _articleRepository;
+		IArticleRepository _articleRepository;		
+		SupplierController _supplierController;
+		List<SupplierController.SuppliersFromConfig> _allSuppliers;
+		
 		private Logger logger;
-
-		private Supplier1 Supplier1;
-		private Supplier2 Supplier2;
-		private Supplier3 Supplier3;
 
 		public ShopService(IArticleRepository articleRepository)
 		{
-			_articleRepository = articleRepository;			
+			_articleRepository = articleRepository;						
+			_supplierController = new SupplierController();
+			_allSuppliers = new List<SupplierController.SuppliersFromConfig>();
+			PopulateSuppliersFromConfiguration();
 			logger = new Logger();
-			Supplier1 = new Supplier1();
-			Supplier2 = new Supplier2();
-			Supplier3 = new Supplier3();
 		}
-
 
 		
 		public Article GetArticle(int id)
@@ -35,12 +34,14 @@ namespace TheShop.Services
 		}
 
 		public void OrderArticle(int id, int maxExpectedPrice, int buyerId)
-		{						
-			Article article = GetArticleFromSupplier(Supplier1, id, maxExpectedPrice);
-			if (article is null)
-				article = GetArticleFromSupplier(Supplier2, id, maxExpectedPrice);
-			if (article is null)
-				article = GetArticleFromSupplier(Supplier3, id, maxExpectedPrice);
+		{
+			Article article = null;
+			foreach (var currentSupplier in _allSuppliers)
+			{				
+				article = _supplierController.GetArticleFromSupplier(currentSupplier, id, maxExpectedPrice);
+				if (article != null)
+					break;
+			}
 
 			_articleRepository.Save(article);
 		}
@@ -75,18 +76,13 @@ namespace TheShop.Services
 
 		}
 
-		private Article GetArticleFromSupplier(ISupplier supplier, int id, int maxExpectedPrice)
+
+		private void PopulateSuppliersFromConfiguration()
 		{
-			Article tempArticle;
-			if (supplier.ArticleInInventory(id))
-			{
-				tempArticle = supplier.GetArticle(id);
-				if (maxExpectedPrice > tempArticle.ArticlePrice)
-				{
-					return tempArticle;
-				}
-			}
-			return null;
+			// imitate reading from config
+			_allSuppliers.Add(SupplierController.SuppliersFromConfig.Supplier1);
+			_allSuppliers.Add(SupplierController.SuppliersFromConfig.Supplier2);
+			_allSuppliers.Add(SupplierController.SuppliersFromConfig.Supplier3);
 		}
 	}
 
