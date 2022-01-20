@@ -5,6 +5,7 @@ using TheShop.DAL.Models;
 using TheShop.DAL.Repositories;
 using TheShop.Services.Interfaces;
 using TheShop.DAL.Interfaces;
+using System.Collections.Generic;
 
 namespace TheShop.Services
 {
@@ -34,37 +35,14 @@ namespace TheShop.Services
 		}
 
 		public void OrderArticle(int id, int maxExpectedPrice, int buyerId)
-		{			
-			Article article = null;
-			Article tempArticle = null;
-			var articleExists = Supplier1.ArticleInInventory(id);
-			if (articleExists)
-			{
-				tempArticle = Supplier1.GetArticle(id);
-				if (maxExpectedPrice < tempArticle.ArticlePrice)
-				{
-					articleExists = Supplier2.ArticleInInventory(id);
-					if (articleExists)
-					{
-						tempArticle = Supplier2.GetArticle(id);
-						if (maxExpectedPrice < tempArticle.ArticlePrice)
-						{
-							articleExists = Supplier3.ArticleInInventory(id);
-							if (articleExists)
-							{
-								tempArticle = Supplier3.GetArticle(id);
-								if (maxExpectedPrice < tempArticle.ArticlePrice)
-								{
-									article = tempArticle;
-								}
-							}
-						}
-					}
-				}
-			}
+		{						
+			Article article = GetArticleFromSupplier(Supplier1, id, maxExpectedPrice);
+			if (article is null)
+				article = GetArticleFromSupplier(Supplier2, id, maxExpectedPrice);
+			if (article is null)
+				article = GetArticleFromSupplier(Supplier3, id, maxExpectedPrice);
 
-			// On successfull order:
-			_articleRepository.Save(tempArticle);
+			_articleRepository.Save(article);
 		}
 
 		public void SellArticle(int id, int maxExpectedPrice, int buyerId)
@@ -95,6 +73,20 @@ namespace TheShop.Services
 			{
 			}
 
+		}
+
+		private Article GetArticleFromSupplier(ISupplier supplier, int id, int maxExpectedPrice)
+		{
+			Article tempArticle;
+			if (supplier.ArticleInInventory(id))
+			{
+				tempArticle = supplier.GetArticle(id);
+				if (maxExpectedPrice > tempArticle.ArticlePrice)
+				{
+					return tempArticle;
+				}
+			}
+			return null;
 		}
 	}
 

@@ -17,12 +17,10 @@ namespace TheShop.Controllers
 		public void OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId)
 		{
 			var article = _shopService.GetArticle(id);
-			if (article is null)	// article not on stock
+			if (article is null)
 			{				
-				_shopService.OrderArticle(id, maxExpectedPrice, buyerId);
-				// if not found among suppliers... return NULL?
-			}
-			// if finalley exists then
+				_shopService.OrderArticle(id, maxExpectedPrice, buyerId);				
+			}			
 			_shopService.SellArticle(id,maxExpectedPrice,buyerId);			
 		}
 
