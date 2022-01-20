@@ -1,4 +1,5 @@
 ﻿using System;
+using TheShop.Controllers;
 using TheShop.DAL.Repositories;
 using TheShop.Services;
 
@@ -8,12 +9,12 @@ namespace TheShop
 	{
 		private static void Main(string[] args)
 		{
-			var shopService = new ShopService(new ArticleRepository());	// until Controller is introduced
-
+			ShopController shopController = new ShopController();	// Client sent requests will be handled by controller
+						
 			try
 			{
 				//order and sell
-				shopService.OrderAndSellArticle(1, 20, 10);
+				shopController.OrderAndSellArticle(1, 20, 10);
 			}
 			catch (Exception ex)
 			{
@@ -23,7 +24,7 @@ namespace TheShop
 			try
 			{
 				//print article on console
-				var article = shopService.GetById(1);
+				var article = shopController.GetById(1);
 				Console.WriteLine("Found article with ID: " + article.ID);
 			}
 			catch (Exception ex)
@@ -34,7 +35,7 @@ namespace TheShop
 			try
 			{
 				//print article on console				
-				var article = shopService.GetById(12);
+				var article = shopController.GetById(12);
 				Console.WriteLine("Found article with ID: " + article.ID);
 			}
 			catch (Exception ex)
