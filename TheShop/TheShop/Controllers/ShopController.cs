@@ -15,8 +15,8 @@ namespace TheShop.Controllers
 		}
 
 		public void OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId)
-		{
-			var article = _shopService.GetArticle(id);
+		{			
+			var article = _shopService.GetArticleInPriceRange(id, maxExpectedPrice);
 			if (article is null)
 			{				
 				_shopService.OrderArticle(id, maxExpectedPrice, buyerId);				
