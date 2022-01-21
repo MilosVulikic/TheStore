@@ -58,7 +58,7 @@ namespace TheShop.Services
 
 		public void SellArticle(int id, int buyerId)
 		{
-			var article = _articleRepository.Get(id);
+			var article = _articleRepository.GetNonSold(id);
 			if (article == null)
 			{
 				throw new Exception("Could not order article");
