@@ -43,7 +43,7 @@ namespace TheShop.Services
 			return null;
 		}
 
-		public void OrderArticle(int id, int maxExpectedPrice, int buyerId)
+		public void OrderArticle(int id, int maxExpectedPrice)
 		{
 			Article article = null;
 			foreach (var currentSupplier in _allSuppliers)
@@ -56,7 +56,7 @@ namespace TheShop.Services
 			_articleRepository.Save(article);
 		}
 
-		public void SellArticle(int id, int maxExpectedPrice, int buyerId)
+		public void SellArticle(int id, int buyerId)
 		{
 			var article = _articleRepository.Get(id);
 			if (article == null)

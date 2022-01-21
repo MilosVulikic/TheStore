@@ -19,9 +19,9 @@ namespace TheShop.Controllers
 			var article = _shopService.GetArticleInPriceRange(id, maxExpectedPrice);
 			if (article is null)
 			{				
-				_shopService.OrderArticle(id, maxExpectedPrice, buyerId);				
+				_shopService.OrderArticle(id, maxExpectedPrice);				
 			}			
-			_shopService.SellArticle(id,maxExpectedPrice,buyerId);			
+			_shopService.SellArticle(id,buyerId);			
 		}
 
 		public Article GetById(int id)
