@@ -14,7 +14,7 @@ namespace TheShop
 			try
 			{
 				//order and sell
-				shopController.OrderAndSellArticle(1, 20, 10);
+				shopController.OrderAndSellArticle(50, 20, 10);
 			}
 			catch (Exception ex)
 			{

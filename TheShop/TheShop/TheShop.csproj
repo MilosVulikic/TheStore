@@ -61,6 +61,7 @@
     <Compile Include="DAL\Repositories\BaseRepository.cs" />
     <Compile Include="Services\Interfaces\IShopService.cs" />
     <Compile Include="Services\Interfaces\ISupplier.cs" />
+    <Compile Include="Services\Suppliers\Supplier.cs" />
     <Compile Include="Utilities\Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

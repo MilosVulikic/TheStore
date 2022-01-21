@@ -3,21 +3,26 @@ using TheShop.Services.Interfaces;
 
 namespace TheShop.Services.Suppliers
 {
-	public class Supplier1 : ISupplier
+	public class Supplier1 : Supplier
 	{
-		public bool ArticleInInventory(int id)
+		public override bool ArticleInInventory(int id)
 		{
-			return true;
+			return base.ArticleInInventory(id);
 		}
 
-		public Article GetArticle(int id)
+		public override Article GetArticle(int id)
 		{
-			return new Article()
+			if (id == 50)
 			{
-				ID = 1,
-				Name_of_article = "Article from supplier1",
-				ArticlePrice = 458
-			};
+				return new Article()
+				{
+					ID = 50,
+					Name_of_article = "Article from supplier1",
+					ArticlePrice = 458
+				};
+			}
+			return null;
+			
 		}
 	}
 
