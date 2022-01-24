@@ -9,7 +9,7 @@ using TheShop.Services.Suppliers;
 
 namespace TheShop.Controllers
 {
-	class SupplierController
+	public class SupplierController
 	{
 		ISupplier _supplier;
 			
