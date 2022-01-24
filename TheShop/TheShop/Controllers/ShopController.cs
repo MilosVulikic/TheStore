@@ -11,7 +11,7 @@ namespace TheShop.Controllers
 
 		public ShopController()
 		{
-			_shopService = new ShopService(new ArticleRepository());
+			_shopService = new ShopService(new ArticleRepository(), new SupplierService());
 		}
 
 		public void OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId)

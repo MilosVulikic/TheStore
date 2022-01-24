@@ -12,18 +12,15 @@ namespace TheShop.Services
 {
 	public class ShopService : IShopService
 	{
-		IArticleRepository _articleRepository;		
-		SupplierController _supplierController;
-		List<SupplierController.SuppliersFromConfig> _allSuppliers;
+		IArticleRepository _articleRepository;
+		ISupplierService _supplierService;		
 		
 		private Logger logger;
 
-		public ShopService(IArticleRepository articleRepository)
+		public ShopService(IArticleRepository articleRepository, ISupplierService supplierService)
 		{
 			_articleRepository = articleRepository;						
-			_supplierController = new SupplierController();
-			_allSuppliers = new List<SupplierController.SuppliersFromConfig>();
-			PopulateSuppliersFromConfiguration();
+			_supplierService = supplierService;			
 			logger = new Logger();
 		}
 
@@ -46,14 +43,12 @@ namespace TheShop.Services
 		public void OrderArticle(int id, int maxExpectedPrice)
 		{
 			Article article = null;
-			foreach (var currentSupplier in _allSuppliers)
-			{				
-				article = _supplierController.GetArticleFromSupplier(currentSupplier, id, maxExpectedPrice);
-				if (article != null)
-					break;
-			}
+			article = _supplierService.GetArticleFromAnySupplier(id, maxExpectedPrice);
 
-			_articleRepository.Save(article);
+			if (article != null)
+			{
+				_articleRepository.Save(article);
+			}
 		}
 
 		public void SellArticle(int id, int buyerId)
@@ -85,15 +80,7 @@ namespace TheShop.Services
 			}
 
 		}
-
-
-		private void PopulateSuppliersFromConfiguration()
-		{
-			// imitate reading from config
-			_allSuppliers.Add(SupplierController.SuppliersFromConfig.Supplier1);
-			_allSuppliers.Add(SupplierController.SuppliersFromConfig.Supplier2);
-			_allSuppliers.Add(SupplierController.SuppliersFromConfig.Supplier3);
-		}
+		
 	}
 
 }
