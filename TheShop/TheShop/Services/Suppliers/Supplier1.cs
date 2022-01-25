@@ -4,7 +4,22 @@ using TheShop.Services.Interfaces;
 namespace TheShop.Services.Suppliers
 {
 	public class Supplier1 : Supplier
-	{
+	{	
+		public Supplier1() 
+			: base(new Article()
+			{
+				ID = 50,
+				Name_of_article = "Article from supplier1",
+				ArticlePrice = 458
+			})
+		{
+		}
+
+
+		public Supplier1(Article article) : base(article)
+		{			
+		}
+
 		public override bool ArticleInInventory(int id)
 		{
 			return base.ArticleInInventory(id);
@@ -12,17 +27,7 @@ namespace TheShop.Services.Suppliers
 
 		public override Article GetArticle(int id)
 		{
-			if (id == 50)
-			{
-				return new Article()
-				{
-					ID = 50,
-					Name_of_article = "Article from supplier1",
-					ArticlePrice = 458
-				};
-			}
-			return null;
-			
+			return base.GetArticle(id);
 		}
 	}
 

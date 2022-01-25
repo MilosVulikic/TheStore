@@ -10,9 +10,21 @@ namespace TheShop.Services.Suppliers
 {
 	public abstract class Supplier : ISupplier
 	{
+		Article _article;
+
+		public Supplier()
+		{
+			_article = new Article();
+		}
+
+		public Supplier(Article article)
+		{
+			_article = article;
+		}
+
 		public virtual bool ArticleInInventory(int id)
 		{
-			if (GetArticle(id) != null)
+			if (_article.ID == id)
 			{
 				return true;
 			}
@@ -20,8 +32,12 @@ namespace TheShop.Services.Suppliers
 		}
 
 		public virtual Article GetArticle(int id)
-		{			
-			return new Article();		
+		{
+			if (_article.ID == id)
+			{
+				return _article;
+			}
+			return null;
 		}
 	}
 }

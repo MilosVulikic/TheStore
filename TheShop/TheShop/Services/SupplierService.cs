@@ -16,6 +16,11 @@ namespace TheShop.Services
 			PopulateSuppliers();
 		}
 
+		public SupplierService(ICollection<ISupplier> suppliers)
+		{
+			_suppliers = (List<ISupplier>)suppliers;			
+		}
+
 		private void PopulateSuppliers()
 		{
 			List<SuppliersFromConfig> supplierNames  = GetSuppliersFromConfiguration();
@@ -55,7 +60,7 @@ namespace TheShop.Services
 			if (ArticleInInventory(id,supplier))
 			{
 				tempArticle = GetArticle(id,supplier);
-				if (maxExpectedPrice > tempArticle.ArticlePrice)
+				if (maxExpectedPrice >= tempArticle.ArticlePrice)
 				{
 					return tempArticle;
 				}
