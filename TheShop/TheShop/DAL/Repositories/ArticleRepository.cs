@@ -7,7 +7,7 @@ namespace TheShop.DAL.Repositories
 
 	public class ArticleRepository : BaseRepository<Article>, IArticleRepository
 	{
-		public ArticleRepository() : base()
+		public ArticleRepository(ApplicationDbContext context) : base(context)
 		{
 		}
 

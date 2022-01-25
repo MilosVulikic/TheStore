@@ -22,10 +22,10 @@ namespace TheShop.DAL.Repositories
 		}
 
 
-		public BaseRepository()
+		public BaseRepository(ApplicationDbContext context)
 		{
 			
-			DatabaseContext = new ApplicationDbContext();
+			DatabaseContext = context;
 			_entities = DatabaseContext.Set<T>();
 		}
 
