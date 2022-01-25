@@ -17,8 +17,8 @@ namespace TheShopTests.DAL.Repositories
 
 		public ArticleRepositoryTests()
 		{
-			DbContext = new ApplicationDbContext();						// how to make entity freamework start with "new db" each time?
-			_articleRepository = new ArticleRepository(DbContext);      // added reference for EntityFramework
+			DbContext = new ApplicationDbContext();						
+			_articleRepository = new ArticleRepository(DbContext);
 			DbContext.Articles.Add(new Article() 
 			{ 
 				ID = 1,
@@ -26,7 +26,7 @@ namespace TheShopTests.DAL.Repositories
 				BuyerUserId = 0,
 				Name_of_article = "NonSoldArticle",
 				IsSold = false,
-				SoldDate = DateTime.Now	// MIN i NULL ne rade		-- treba da sredim da bude nullabilno
+				SoldDate = DateTime.Now
 			});
 			DbContext.Articles.Add(new Article()
 			{
@@ -37,10 +37,7 @@ namespace TheShopTests.DAL.Repositories
 				IsSold = true,
 				SoldDate = DateTime.Now
 			});
-			DbContext.SaveChanges();
-		
-			var a = DbContext.Articles.ToList();
-
+			DbContext.SaveChanges();			
 		}
 
 		#region Get
@@ -119,11 +116,7 @@ namespace TheShopTests.DAL.Repositories
 		#region Save
 		[TestMethod]
 		public void SaveArticle_ArticleAddSucceeded_IncreasedArticleCount()
-		{
-			//DbContext.Articles.RemoveRange(DbContext.Articles);		// MOVE OUT TO DB SETUP...
-			//DbContext.SaveChanges();
-			//var a = DbContext.Articles.ToList();
-
+		{			
 			// Arrange
 			var newArticle = new Article()
 			{				
@@ -131,7 +124,7 @@ namespace TheShopTests.DAL.Repositories
 				BuyerUserId = 0,
 				Name_of_article = "testCreatedArticle",
 				IsSold = false,
-				SoldDate = DateTime.Now // MIN i NULL ne rade
+				SoldDate = DateTime.Now
 			};
 			var expectedNumberOfArticles = DbContext.Articles.Count() + 1;
 
