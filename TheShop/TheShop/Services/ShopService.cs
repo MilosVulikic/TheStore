@@ -33,7 +33,7 @@ namespace TheShop.Services
 		public Article GetArticleInPriceRange(int id, int maxExpectedPrice)
 		{
 			var article = _articleRepository.Get(id);
-			if (article != null && article.ArticlePrice < maxExpectedPrice)
+			if (article != null && article.ArticlePrice <= maxExpectedPrice)
 			{
 				return article;
 			}
@@ -54,33 +54,30 @@ namespace TheShop.Services
 		public void SellArticle(int id, int buyerId)
 		{
 			var article = _articleRepository.GetNonSold(id);
-			if (article == null)
+			if (article != null)
 			{
-				throw new Exception("Could not order article");
-			}
+				logger.Debug("Trying to sell article with id=" + id);
 
-			logger.Debug("Trying to sell article with id=" + id);
+				article.IsSold = true;
+				article.SoldDate = DateTime.Now;
+				article.BuyerUserId = buyerId;
 
-			article.IsSold = true;
-			article.SoldDate = DateTime.Now;
-			article.BuyerUserId = buyerId;
-
-			try
-			{
-				_articleRepository.Save(article);
-				logger.Info("Article with id=" + id + " is sold.");
-			}
-			catch (ArgumentNullException ex)
-			{
-				logger.Error("Could not save article with id=" + id);
-				throw new Exception("Could not save article with id");
-			}
-			catch (Exception)
-			{
-			}
-
+				try
+				{
+					_articleRepository.Save(article);
+					logger.Info("Article with id=" + id + " is sold.");
+				}
+				catch (ArgumentNullException ex)
+				{
+					logger.Error("Could not save article with id=" + id);
+					throw new Exception("Could not save article with id");
+				}
+				catch (Exception)
+				{
+				}				
+			}			
 		}
-		
+
 	}
 
 }

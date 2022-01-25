@@ -12,15 +12,18 @@ namespace TheShopTests.Services
 	public class ShopServiceTests
 	{
 		private readonly IShopService _shopService;
-		private readonly Mock<IArticleRepository> _articleRepositoryMock;		
+		private readonly Mock<IArticleRepository> _articleRepositoryMock;
+		private readonly Mock<ISupplierService> _supplierServiceMock;		
+
 		private Article _testArticle;
 
 
 		public ShopServiceTests()
 		{
 			_articleRepositoryMock = new Mock<IArticleRepository>();
-			_shopService = new ShopService(_articleRepositoryMock.Object);
-			
+			_supplierServiceMock = new Mock<ISupplierService>();
+			_shopService = new ShopService(_articleRepositoryMock.Object, _supplierServiceMock.Object);						
+
 			_testArticle = new Article()
 			{
 				//ID = 1,
@@ -141,7 +144,145 @@ namespace TheShopTests.Services
 			Assert.IsNull(result);
 			_articleRepositoryMock.Verify(x => x.Get(id), Times.Once);
 		}
-		#endregion		
+		#endregion
 
+
+		#region OrderArticle
+		[TestMethod]
+		public void OrderArticle_ArticleFoundAmongSuppliers_ShouldCallRepositorySave()
+		{
+			// Arrange
+			var id = 1;
+			var article = this.GetTestArticleWithId(id);
+			var maxExpectedPrice = 200;
+
+			_articleRepositoryMock
+				.Setup(x => x.Get(id))
+				.Returns(() => article);
+
+			_supplierServiceMock
+				.Setup(x => x.GetArticleFromAnySupplier(id,maxExpectedPrice))
+				.Returns(() => article);
+
+			// Act
+			_shopService.OrderArticle(id, maxExpectedPrice);
+
+			// Assert
+			_articleRepositoryMock.Verify(x => x.Save(article), Times.Once);
+		}
+
+		[TestMethod]
+		public void OrderArticle_ArticleNotFoundAmongSuppliers_ShouldNotCallRepositorySave()
+		{
+			// Arrange
+			var id = 1;
+			var article = this.GetTestArticleWithId(id);
+			var maxExpectedPrice = 200;
+
+			_articleRepositoryMock
+				.Setup(x => x.Get(id))
+				.Returns(() => article);
+
+			_supplierServiceMock
+				.Setup(x => x.GetArticleFromAnySupplier(id, maxExpectedPrice))
+				.Returns(() => null);
+
+			// Act
+			_shopService.OrderArticle(id, maxExpectedPrice);
+
+			// Assert
+			_articleRepositoryMock.Verify(x => x.Save(article), Times.Never);
+		}
+		#endregion
+
+
+		#region SellArticle
+		[TestMethod]
+		public void SellArticle_NonSoldArticleExists_ShouldCallRepositorySave()
+		{
+			// Arrange			
+			var id = 1;
+			var buyerId = 100;
+			var dateBeforeExecution = DateTime.Now;
+
+			var article = GetTestArticleWithId(id);
+
+			_articleRepositoryMock
+				.Setup(x => x.GetNonSold(id))
+				.Returns(() => article);
+
+			// Act
+			_shopService.SellArticle(id, buyerId);
+
+			
+
+			// Assert			
+			Assert.AreEqual(buyerId, article.BuyerUserId);
+			Assert.IsTrue(dateBeforeExecution <= article.SoldDate);
+			_articleRepositoryMock.Verify(x => x.Save(article), Times.Once);
+		}
+
+		[TestMethod]
+		public void SellArticle_ArticleSold_ShouldSetPropertySoldToTrue()
+		{
+			// Arrange			
+			var id = 1;
+			var buyerId = 100;			
+
+			var article = GetTestArticleWithId(id);
+
+			_articleRepositoryMock
+				.Setup(x => x.GetNonSold(id))
+				.Returns(() => article);
+
+			// Act
+			_shopService.SellArticle(id, buyerId);
+
+			// Assert			
+			Assert.AreEqual(true, article.IsSold);			
+		}
+
+		[TestMethod]
+		public void SellArticle_ArticleSold_ShouldUpdateSoldDateProperty()
+		{
+			// Arrange			
+			var id = 1;
+			var buyerId = 100;
+			var dateBeforeExecution = DateTime.Now;
+
+			var article = GetTestArticleWithId(id);
+
+			_articleRepositoryMock
+				.Setup(x => x.GetNonSold(id))
+				.Returns(() => article);
+
+			// Act
+			_shopService.SellArticle(id, buyerId);
+
+			// Assert			
+			Assert.IsTrue(dateBeforeExecution <= article.SoldDate);			
+		}
+
+		[TestMethod]
+		public void SellArticle_NonSoldArticleDoesntExist_ShouldNotCallRepositorySave()
+		{
+			// Arrange			
+			var id = 1;
+			var buyerId = 100;
+			var dateBeforeExecution = DateTime.Now;
+
+			var article = GetTestArticleWithId(id);
+
+			_articleRepositoryMock
+				.Setup(x => x.GetNonSold(id))
+				.Returns(() => null);
+
+			// Act
+			_shopService.SellArticle(id, buyerId);
+
+			// Assert
+			_articleRepositoryMock.Verify(x => x.Save(article), Times.Never);
+		}
+		#endregion
 	}
 }
