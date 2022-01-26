@@ -37,7 +37,7 @@ namespace TheShopTests.DAL.Repositories
 				IsSold = true,
 				SoldDate = DateTime.Now
 			});
-			DbContext.SaveChanges();			
+			DbContext.SaveChanges();
 		}
 
 		#region Get
@@ -113,9 +113,9 @@ namespace TheShopTests.DAL.Repositories
 		#endregion
 
 
-		#region Save
+		#region Create
 		[TestMethod]
-		public void SaveArticle_ArticleAddSucceeded_IncreasedArticleCount()
+		public void CreateArticle_ArticleAddSucceeded_IncreasedArticleCount()
 		{			
 			// Arrange
 			var newArticle = new Article()
@@ -131,7 +131,7 @@ namespace TheShopTests.DAL.Repositories
 
 
 			// Act
-			var createdArticle = _articleRepository.Save(newArticle);
+			var createdArticle = _articleRepository.Create(newArticle);
 
 			// Assert			
 			Assert.IsNotNull(createdArticle);
@@ -143,34 +143,71 @@ namespace TheShopTests.DAL.Repositories
 
 		#region Update
 		[TestMethod]
-		public void TempName()
+		public void UpdateArticle_ArticleExists_ArticleUpdated()
 		{
 			// Arrange
-			int id = 1;
+			var typeId = 1;
+			var article = _articleRepository.Get(typeId);
 
-			var a = DbContext.Articles.ToArray();
-			var b = DbContext.Articles.FirstOrDefault();
-			var c = DbContext.Articles.FirstOrDefault(x => x.TypeId == 1);
-			var d = DbContext.Articles.Select(x => x.TypeId == 1).ToList();
-
+			article.Name = "Updated test article";
+			
 			// Act
-			var result = _articleRepository.Get(id);
-
-			result.Name = "changing after result";
-
-			_articleRepository.Update(result);
-
-			result.Name = "changing after udate";
-			_articleRepository.Save(result);
-
-			a = DbContext.Articles.ToArray();
-			b = DbContext.Articles.FirstOrDefault();
-			c = DbContext.Articles.FirstOrDefault(x => x.TypeId == 1);
-			d = DbContext.Articles.Select(x => x.TypeId == 1).ToList();
+			var updatedArticle = _articleRepository.Update(article);
 
 			// Assert			
-			Assert.IsNotNull(result);
-			Assert.AreEqual(id, result.TypeId);
+			Assert.IsNotNull(updatedArticle);
+			Assert.AreEqual(article.Name, updatedArticle.Name);
+			Assert.AreEqual(article.TypeId,updatedArticle.TypeId);			
+		}
+
+		[TestMethod]
+		public void UpdateArticle_ArticleDoesntExist_ArticleNotUpdated()
+		{
+			// Arrange
+			var typeId = 0;
+			var article = _articleRepository.Get(typeId);			
+
+			// Act
+			var updatedArticle = _articleRepository.Update(article);			
+
+			// Assert			
+			Assert.IsNull(updatedArticle);			
+		}
+		#endregion
+
+		#region Delete
+		[TestMethod]
+		public void DeleteArticle_ArticleExists_ArticleDeleted()
+		{
+			// Arrange
+			var typeId = 1;
+			var article = _articleRepository.Get(typeId);
+
+			var expectedNumberOfArticles = DbContext.Articles.Count() - 1;
+
+			// Act
+			var deletedArticle = _articleRepository.Delete(article);
+
+			// Assert			
+			Assert.IsNotNull(deletedArticle);
+			Assert.AreEqual(expectedNumberOfArticles, DbContext.Articles.Count());			
+		}
+
+		[TestMethod]
+		public void DeleteArticle_ArticleDoesntExist_ArticleNotDeleted()
+		{
+			// Arrange
+			var typeId = 0;
+			var article = _articleRepository.Get(typeId);
+
+			var expectedNumberOfArticles = DbContext.Articles.Count();
+
+			// Act
+			var updatedArticle = _articleRepository.Delete(article);
+
+			// Assert
+			Assert.IsNull(updatedArticle);
+			Assert.AreEqual(expectedNumberOfArticles, DbContext.Articles.Count());			
 		}
 		#endregion
 	}

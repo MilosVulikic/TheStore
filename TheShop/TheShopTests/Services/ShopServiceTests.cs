@@ -167,7 +167,7 @@ namespace TheShopTests.Services
 			_shopService.OrderArticle(id, maxExpectedPrice);
 
 			// Assert
-			_articleRepositoryMock.Verify(x => x.Save(article), Times.Once);
+			_articleRepositoryMock.Verify(x => x.Create(article), Times.Once);
 		}
 
 		[TestMethod]
@@ -190,7 +190,7 @@ namespace TheShopTests.Services
 			_shopService.OrderArticle(id, maxExpectedPrice);
 
 			// Assert
-			_articleRepositoryMock.Verify(x => x.Save(article), Times.Never);
+			_articleRepositoryMock.Verify(x => x.Create(article), Times.Never);
 		}
 		#endregion
 

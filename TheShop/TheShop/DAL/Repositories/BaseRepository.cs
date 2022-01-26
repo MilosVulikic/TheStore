@@ -14,25 +14,59 @@ namespace TheShop.DAL.Repositories
 			return _entities.FirstOrDefault(s => s.TypeId == id);
 		}
 
-		public virtual T Save(T entity)
+		public virtual T Create(T entity)
 		{
-			var result = _entities.Add(entity);
-			DatabaseContext.SaveChanges();
-			return result;
+			try
+			{
+				var result = _entities.Add(entity);
+				DatabaseContext.SaveChanges();
+				return result;
+			}
+			catch (System.Exception)
+			{
+				// LOG
+				throw;
+			}
 		}
 
 		public virtual T Update(T entity)
 		{
-			var result = _entities.Find(entity.ID);
-			if (result != null)
+			try
 			{
-				DatabaseContext.Entry(entity).CurrentValues.SetValues(entity);
-				DatabaseContext.SaveChanges();
+				var result = _entities.Find(entity.ID);
+				if (result != null)
+				{
+					DatabaseContext.Entry(entity).CurrentValues.SetValues(entity);
+					DatabaseContext.SaveChanges();
+				}
+				return result;
 			}
-			
-			return result;
+			catch (System.Exception)
+			{
+				// LOG
+				return null;
+			}									
 		}
 
+		public virtual T Delete(T entity)
+		{
+			try
+			{
+				var result = _entities.Find(entity.ID);
+				if (result != null)
+				{
+					DatabaseContext.Articles.Attach(entity);
+					DatabaseContext.Articles.Remove(entity);
+					DatabaseContext.SaveChanges();
+				}
+				return result;
+			}
+			catch (System.Exception)
+			{
+				// LOG
+				return null;
+			}
+		}
 
 		public BaseRepository(ApplicationDbContext context)
 		{

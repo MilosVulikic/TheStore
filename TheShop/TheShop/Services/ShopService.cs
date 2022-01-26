@@ -47,7 +47,7 @@ namespace TheShop.Services
 
 			if (article != null)
 			{
-				_articleRepository.Save(article);
+				_articleRepository.Create(article);
 			}
 			return article;
 		}
