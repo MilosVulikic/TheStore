@@ -1,7 +1,9 @@
 ﻿using System;
 using TheShop.Controllers;
+using TheShop.DAL.Models;
 using TheShop.DAL.Repositories;
 using TheShop.Services;
+using TheShop.Services.Interfaces;
 
 namespace TheShop
 {
@@ -9,8 +11,9 @@ namespace TheShop
 	{
 		private static void Main(string[] args)
 		{
-			ShopController shopController = new ShopController();	// Client sent requests will be handled by controller
-						
+			ShopController shopController = new ShopController(GetShopServiceInstance());   // Client sent requests will be handled by controller
+
+
 			try
 			{
 				//order and sell
@@ -21,29 +24,28 @@ namespace TheShop
 				Console.WriteLine(ex);
 			}
 
-			try
-			{
-				//print article on console
-				var article = shopController.GetById(1);
-				Console.WriteLine("Found article with ID: " + article.ID);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("Article not found: " + ex);
-			}
-
-			try
-			{
-				//print article on console				
-				var article = shopController.GetById(12);
-				Console.WriteLine("Found article with ID: " + article.ID);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("Article not found: " + ex);
-			}
+			var responseGetById = shopController.GetById(1);
+			ProcessResponseGetById(responseGetById);
+			
+			responseGetById = shopController.GetById(12);
+			ProcessResponseGetById(responseGetById);
 
 			Console.ReadKey();
+		}
+
+		private static IShopService GetShopServiceInstance()
+		{
+			return new ShopService(new ArticleRepository(new DAL.ApplicationDbContext()), new SupplierService());
+		}
+
+		
+		private static void ProcessResponseGetById(Article article)
+		{
+			if (article != null)
+			{
+				Console.WriteLine("Found article with ID: " + article.ID);
+			}
+			Console.WriteLine("Article not found: ");
 		}
 	}
 }

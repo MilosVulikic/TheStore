@@ -5,17 +5,17 @@ using TheShop.Services.Interfaces;
 
 namespace TheShop.Controllers
 {
-	class ShopController
+	public class ShopController
 	{
 		IShopService _shopService;
 
-		public ShopController()
+		public ShopController(IShopService shopService)
 		{
-			_shopService = new ShopService(new ArticleRepository(new DAL.ApplicationDbContext()), new SupplierService());
+			_shopService = shopService;
 		}
 
 		public void OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId)	// we need to inform whether it was successful - either bool or articleDTO should be returned
-		{			
+		{
 			var article = _shopService.GetArticleInPriceRange(id, maxExpectedPrice);
 			if (article is null)
 			{				
