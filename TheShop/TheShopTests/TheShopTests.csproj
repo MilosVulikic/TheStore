@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Controllers\ShopControllerTests.cs" />
     <Compile Include="DAL\Repositories\ArticleRepositoryTests.cs" />
+    <Compile Include="MapperTests\ArticleMapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ShopServiceTests.cs" />
     <Compile Include="Services\SupplierServiceTests.cs" />
