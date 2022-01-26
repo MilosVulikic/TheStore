@@ -27,9 +27,9 @@ namespace TheShopTests.Services
 			_testArticle = new Article()
 			{
 				ID = 1,
-				Name_of_article = "Test article",
+				Name = "Test article",
 				IsSold = false,
-				ArticlePrice = 200,
+				Price = 200,
 				BuyerUserId = 100				
 			};
 		}
@@ -89,7 +89,7 @@ namespace TheShopTests.Services
 			var maxExpectedPrice = 200;
 
 			var article = this.GetTestArticleWithId(id);
-			article.ArticlePrice = maxExpectedPrice;
+			article.Price = maxExpectedPrice;
 
 			_articleRepositoryMock
 				.Setup(x => x.Get(id))
@@ -111,7 +111,7 @@ namespace TheShopTests.Services
 			var maxExpectedPrice = 200;
 
 			var article = this.GetTestArticleWithId(id);
-			article.ArticlePrice = maxExpectedPrice + 1;
+			article.Price = maxExpectedPrice + 1;
 
 			_articleRepositoryMock
 				.Setup(x => x.Get(id))

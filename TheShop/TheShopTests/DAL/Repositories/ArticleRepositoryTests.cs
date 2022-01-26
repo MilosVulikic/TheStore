@@ -22,18 +22,18 @@ namespace TheShopTests.DAL.Repositories
 			DbContext.Articles.Add(new Article() 
 			{ 
 				TypeId = 1,
-				ArticlePrice = 200,
+				Price = 200,
 				BuyerUserId = 0,
-				Name_of_article = "NonSoldArticle",
+				Name = "NonSoldArticle",
 				IsSold = false,
 				SoldDate = DateTime.Now
 			});
 			DbContext.Articles.Add(new Article()
 			{
 				TypeId = 2,
-				ArticlePrice = 200,
+				Price = 200,
 				BuyerUserId = 100,
-				Name_of_article = "SoldArticle",
+				Name = "SoldArticle",
 				IsSold = true,
 				SoldDate = DateTime.Now
 			});
@@ -121,9 +121,9 @@ namespace TheShopTests.DAL.Repositories
 			var newArticle = new Article()
 			{			
 				TypeId = 1,
-				ArticlePrice = 400,
+				Price = 400,
 				BuyerUserId = 0,
-				Name_of_article = "testCreatedArticle",
+				Name = "testCreatedArticle",
 				IsSold = false,
 				SoldDate = DateTime.Now
 			};
@@ -135,7 +135,7 @@ namespace TheShopTests.DAL.Repositories
 
 			// Assert			
 			Assert.IsNotNull(createdArticle);
-			Assert.AreEqual(newArticle.Name_of_article,createdArticle.Name_of_article);
+			Assert.AreEqual(newArticle.Name,createdArticle.Name);
 			Assert.IsTrue(createdArticle.TypeId != 0);
 			Assert.AreEqual(expectedNumberOfArticles,DbContext.Articles.Count());
 		}
@@ -156,11 +156,11 @@ namespace TheShopTests.DAL.Repositories
 			// Act
 			var result = _articleRepository.Get(id);
 
-			result.Name_of_article = "changing after result";
+			result.Name = "changing after result";
 
 			_articleRepository.Update(result);
 
-			result.Name_of_article = "changing after udate";
+			result.Name = "changing after udate";
 			_articleRepository.Save(result);
 
 			a = DbContext.Articles.ToArray();

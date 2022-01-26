@@ -26,8 +26,8 @@ namespace TheShopTests.Services
 			_testArticle = new Article()
 			{
 				TypeId = 1,
-				Name_of_article = "Test article from supplier1",
-				ArticlePrice = 200
+				Name = "Test article from supplier1",
+				Price = 200
 			};
 
 			_testSupplier = new Supplier1(_testArticle);

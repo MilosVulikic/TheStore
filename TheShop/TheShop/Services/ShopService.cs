@@ -33,7 +33,7 @@ namespace TheShop.Services
 		public Article GetArticleInPriceRange(int id, int maxExpectedPrice)
 		{
 			var article = _articleRepository.Get(id);
-			if (article != null && article.ArticlePrice <= maxExpectedPrice)
+			if (article != null && article.Price <= maxExpectedPrice)
 			{
 				return article;
 			}

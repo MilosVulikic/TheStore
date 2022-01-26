@@ -60,7 +60,7 @@ namespace TheShop.Services
 			if (ArticleInInventory(id,supplier))
 			{
 				tempArticle = GetArticle(id,supplier);
-				if (maxExpectedPrice >= tempArticle.ArticlePrice)
+				if (maxExpectedPrice >= tempArticle.Price)
 				{
 					return tempArticle;
 				}
