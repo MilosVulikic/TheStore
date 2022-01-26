@@ -21,6 +21,9 @@ namespace TheShop
 			response = shopController.GetById(1);
 			ProcessResponseGetById(response);
 
+			response = shopController.GetById(50);
+			ProcessResponseGetById(response);
+
 			response = shopController.GetById(12);
 			ProcessResponseGetById(response);
 
@@ -35,17 +38,16 @@ namespace TheShop
 		
 		private static void ProcessResponseGetById(ArticleDTO article)
 		{
-			if (article != null)
-			{
+			if (article != null)			
 				Console.WriteLine("Found article with ID: " + article.ID);
-			}
-			Console.WriteLine("Article not found.");
+			else
+				Console.WriteLine("Article not found.");
 		}
 
 		private static void ProcessResponseOrderAndSellArticle(ArticleDTO responseOrderAndSellArticle)
 		{
 			if (responseOrderAndSellArticle != null)
-				Console.WriteLine($"Article {responseOrderAndSellArticle.ID} ordered succesfully");
+				Console.WriteLine($"Article ID: {responseOrderAndSellArticle.ID} ordered succesfully");
 			else
 				Console.WriteLine("Article sold out");
 		}

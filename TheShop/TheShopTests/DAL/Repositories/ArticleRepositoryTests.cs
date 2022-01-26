@@ -21,7 +21,7 @@ namespace TheShopTests.DAL.Repositories
 			_articleRepository = new ArticleRepository(DbContext);
 			DbContext.Articles.Add(new Article() 
 			{ 
-				ID = 1,
+				TypeId = 1,
 				ArticlePrice = 200,
 				BuyerUserId = 0,
 				Name_of_article = "NonSoldArticle",
@@ -30,7 +30,7 @@ namespace TheShopTests.DAL.Repositories
 			});
 			DbContext.Articles.Add(new Article()
 			{
-				ID = 2,
+				TypeId = 2,
 				ArticlePrice = 200,
 				BuyerUserId = 100,
 				Name_of_article = "SoldArticle",
@@ -52,7 +52,7 @@ namespace TheShopTests.DAL.Repositories
 
 			// Assert			
 			Assert.IsNotNull(result);
-			Assert.AreEqual(id, result.ID);			
+			Assert.AreEqual(id, result.TypeId);			
 		}
 
 		[TestMethod]
@@ -82,7 +82,7 @@ namespace TheShopTests.DAL.Repositories
 			// Assert			
 			Assert.IsNotNull(result);
 			Assert.IsFalse(result.IsSold);
-			Assert.AreEqual(id, result.ID);
+			Assert.AreEqual(id, result.TypeId);
 		}
 
 		[TestMethod]
@@ -119,7 +119,8 @@ namespace TheShopTests.DAL.Repositories
 		{			
 			// Arrange
 			var newArticle = new Article()
-			{				
+			{			
+				TypeId = 1,
 				ArticlePrice = 400,
 				BuyerUserId = 0,
 				Name_of_article = "testCreatedArticle",
@@ -135,8 +136,41 @@ namespace TheShopTests.DAL.Repositories
 			// Assert			
 			Assert.IsNotNull(createdArticle);
 			Assert.AreEqual(newArticle.Name_of_article,createdArticle.Name_of_article);
-			Assert.IsTrue(createdArticle.ID != 0);
+			Assert.IsTrue(createdArticle.TypeId != 0);
 			Assert.AreEqual(expectedNumberOfArticles,DbContext.Articles.Count());
+		}
+		#endregion
+
+		#region Update
+		[TestMethod]
+		public void TempName()
+		{
+			// Arrange
+			int id = 1;
+
+			var a = DbContext.Articles.ToArray();
+			var b = DbContext.Articles.FirstOrDefault();
+			var c = DbContext.Articles.FirstOrDefault(x => x.TypeId == 1);
+			var d = DbContext.Articles.Select(x => x.TypeId == 1).ToList();
+
+			// Act
+			var result = _articleRepository.Get(id);
+
+			result.Name_of_article = "changing after result";
+
+			_articleRepository.Update(result);
+
+			result.Name_of_article = "changing after udate";
+			_articleRepository.Save(result);
+
+			a = DbContext.Articles.ToArray();
+			b = DbContext.Articles.FirstOrDefault();
+			c = DbContext.Articles.FirstOrDefault(x => x.TypeId == 1);
+			d = DbContext.Articles.Select(x => x.TypeId == 1).ToList();
+
+			// Assert			
+			Assert.IsNotNull(result);
+			Assert.AreEqual(id, result.TypeId);
 		}
 		#endregion
 	}

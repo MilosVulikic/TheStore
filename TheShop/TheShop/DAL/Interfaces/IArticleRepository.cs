@@ -8,6 +8,8 @@ namespace TheShop.DAL.Interfaces
 
 		Article GetNonSold(int id);
 
-		Article Save(Article article);		
+		Article Save(Article article);
+
+		Article Update(Article article);
 	}
 }

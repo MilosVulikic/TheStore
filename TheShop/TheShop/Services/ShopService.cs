@@ -65,7 +65,7 @@ namespace TheShop.Services
 
 				try
 				{
-					_articleRepository.Save(article);
+					_articleRepository.Update(article);					
 					logger.Info("Article with id=" + id + " is sold.");
 				}
 				catch (ArgumentNullException ex)

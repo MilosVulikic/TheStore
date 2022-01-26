@@ -14,7 +14,7 @@ namespace TheShop.Mappers
 		{
 			return new ArticleDTO()
 			{
-				ID = model.ID,
+				ID = model.TypeId,
 				Name_of_article = model.Name_of_article,
 				ArticlePrice = model.ArticlePrice
 			};
@@ -24,7 +24,7 @@ namespace TheShop.Mappers
 		{
 			return new Article()
 			{
-				ID = dto.ID,
+				TypeId = dto.ID,
 				Name_of_article = dto.Name_of_article,
 				ArticlePrice = dto.ArticlePrice
 			};

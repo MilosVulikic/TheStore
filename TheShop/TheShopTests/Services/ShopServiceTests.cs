@@ -26,18 +26,17 @@ namespace TheShopTests.Services
 
 			_testArticle = new Article()
 			{
-				//ID = 1,
+				ID = 1,
 				Name_of_article = "Test article",
 				IsSold = false,
 				ArticlePrice = 200,
-				BuyerUserId = 100,
-				SoldDate = DateTime.Now
+				BuyerUserId = 100				
 			};
 		}
 
 		private Article GetTestArticleWithId(int id)
 		{
-			_testArticle.ID = id;
+			_testArticle.TypeId = id;
 			return _testArticle;
 		}
 
@@ -198,7 +197,7 @@ namespace TheShopTests.Services
 
 		#region SellArticle
 		[TestMethod]
-		public void SellArticle_NonSoldArticleExists_ShouldCallRepositorySave()
+		public void SellArticle_NonSoldArticleExists_ShouldCallRepositoryUpdate()
 		{
 			// Arrange			
 			var id = 1;
@@ -219,7 +218,7 @@ namespace TheShopTests.Services
 			// Assert			
 			Assert.AreEqual(buyerId, article.BuyerUserId);
 			Assert.IsTrue(dateBeforeExecution <= article.SoldDate);
-			_articleRepositoryMock.Verify(x => x.Save(article), Times.Once);
+			_articleRepositoryMock.Verify(x => x.Update(article), Times.Once);
 		}
 
 		[TestMethod]
@@ -281,7 +280,7 @@ namespace TheShopTests.Services
 			_shopService.SellArticle(id, buyerId);
 
 			// Assert
-			_articleRepositoryMock.Verify(x => x.Save(article), Times.Never);
+			_articleRepositoryMock.Verify(x => x.Update(article), Times.Never);
 		}
 		#endregion
 	}

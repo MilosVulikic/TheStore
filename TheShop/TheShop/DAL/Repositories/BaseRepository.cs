@@ -11,13 +11,25 @@ namespace TheShop.DAL.Repositories
 
 		public virtual T Get(int id)
 		{
-			return _entities.FirstOrDefault(s => s.ID == id);
+			return _entities.FirstOrDefault(s => s.TypeId == id);
 		}
 
 		public virtual T Save(T entity)
 		{
 			var result = _entities.Add(entity);
 			DatabaseContext.SaveChanges();
+			return result;
+		}
+
+		public virtual T Update(T entity)
+		{
+			var result = _entities.Find(entity.ID);
+			if (result != null)
+			{
+				DatabaseContext.Entry(entity).CurrentValues.SetValues(entity);
+				DatabaseContext.SaveChanges();
+			}
+			
 			return result;
 		}
 
