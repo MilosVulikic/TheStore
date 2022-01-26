@@ -18,15 +18,15 @@ namespace TheShop.Controllers
 			_articleMapper = mapper;
 		}
 
-		public ArticleDTO OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId)
+		public ArticleDTO OrderAndSellArticle(int articleId, int maxExpectedPrice, int buyerId)
 		{
 			try
 			{
-				var article = _shopService.GetArticleInPriceRange(id, maxExpectedPrice);
+				var article = _shopService.GetArticleInPriceRange(articleId, maxExpectedPrice);
 				if (article is null)
-					article = _shopService.OrderArticle(id, maxExpectedPrice);
+					article = _shopService.OrderArticle(articleId, maxExpectedPrice);
 				
-				article = _shopService.SellArticle(id, buyerId);
+				article = _shopService.SellArticle(articleId, buyerId);
 				
 				if (article != null)				
 					return _articleMapper.ToDto(article);				
@@ -40,11 +40,11 @@ namespace TheShop.Controllers
 			}
 		}
 
-		public ArticleDTO GetById(int id)
+		public ArticleDTO GetById(int articleId)
 		{
 			try
 			{
-				var article = _shopService.GetArticle(id);
+				var article = _shopService.GetArticle(articleId);
 				if (article != null)
 					return _articleMapper.ToDto(article);
 				return null;

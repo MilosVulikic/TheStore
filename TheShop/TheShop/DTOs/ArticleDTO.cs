@@ -8,7 +8,7 @@ namespace TheShop.DTOs
 {
 	public class ArticleDTO
 	{
-		public int TypeId { get; set; }
+		public int ArticleId { get; set; }
 
 		public string Name { get; set; }
 

@@ -25,14 +25,14 @@ namespace TheShop.Services
 		}
 
 		
-		public Article GetArticle(int id)
+		public Article GetArticle(int articleId)
 		{
-			return _articleRepository.Get(id);
+			return _articleRepository.Get(articleId);
 		}
 
-		public Article GetArticleInPriceRange(int id, int maxExpectedPrice)
+		public Article GetArticleInPriceRange(int articleId, int maxExpectedPrice)
 		{
-			var article = _articleRepository.Get(id);
+			var article = _articleRepository.Get(articleId);
 			if (article != null && article.Price <= maxExpectedPrice)
 			{
 				return article;
@@ -40,10 +40,10 @@ namespace TheShop.Services
 			return null;
 		}
 
-		public Article OrderArticle(int id, int maxExpectedPrice)
+		public Article OrderArticle(int articleId, int maxExpectedPrice)
 		{
 			Article article = null;
-			article = _supplierService.GetArticleFromAnySupplier(id, maxExpectedPrice);
+			article = _supplierService.GetArticleFromAnySupplier(articleId, maxExpectedPrice);
 
 			if (article != null)
 			{
@@ -52,12 +52,12 @@ namespace TheShop.Services
 			return article;
 		}
 
-		public Article SellArticle(int id, int buyerId)
+		public Article SellArticle(int articleId, int buyerId)
 		{
-			var article = _articleRepository.GetNonSold(id);
+			var article = _articleRepository.GetNonSold(articleId);
 			if (article != null)
 			{
-				logger.Debug("Trying to sell article with id=" + id);
+				logger.Debug("Trying to sell article with id=" + articleId);
 
 				article.IsSold = true;
 				article.SoldDate = DateTime.Now;
@@ -66,16 +66,16 @@ namespace TheShop.Services
 				try
 				{
 					_articleRepository.Update(article);					
-					logger.Info("Article with id=" + id + " is sold.");
+					logger.Info("Article with id=" + articleId + " is sold.");
 				}
 				catch (ArgumentNullException ex)
 				{
-					logger.Error("Could not save article with id=" + id);
+					logger.Error("Could not save article with typeId=" + articleId);
 					throw new Exception("Could not save article with id");
 				}
 				catch (Exception)
 				{
-				}				
+				}
 			}
 			return article;
 		}

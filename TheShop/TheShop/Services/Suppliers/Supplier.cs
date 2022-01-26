@@ -24,7 +24,7 @@ namespace TheShop.Services.Suppliers
 
 		public virtual bool ArticleInInventory(int id)
 		{
-			if (_article.TypeId == id)
+			if (_article.ArticleId == id)
 			{
 				return true;
 			}
@@ -33,7 +33,7 @@ namespace TheShop.Services.Suppliers
 
 		public virtual Article GetArticle(int id)
 		{
-			if (_article.TypeId == id)
+			if (_article.ArticleId == id)
 			{
 				return _article;
 			}

@@ -39,7 +39,7 @@ namespace TheShop
 		private static void ProcessResponseGetById(ArticleDTO article)
 		{
 			if (article != null)			
-				Console.WriteLine("Found article with ID: " + article.TypeId);
+				Console.WriteLine("Found article with ID: " + article.ArticleId);
 			else
 				Console.WriteLine("Article not found.");
 		}
@@ -47,7 +47,7 @@ namespace TheShop
 		private static void ProcessResponseOrderAndSellArticle(ArticleDTO responseOrderAndSellArticle)
 		{
 			if (responseOrderAndSellArticle != null)
-				Console.WriteLine($"Article ID: {responseOrderAndSellArticle.TypeId} ordered succesfully");
+				Console.WriteLine($"Article ID: {responseOrderAndSellArticle.ArticleId} ordered succesfully");
 			else
 				Console.WriteLine("Article sold out");
 		}

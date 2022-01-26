@@ -21,7 +21,7 @@ namespace TheShopTests.DAL.Repositories
 			_articleRepository = new ArticleRepository(DbContext);
 			DbContext.Articles.Add(new Article() 
 			{ 
-				TypeId = 1,
+				ArticleId = 1,
 				Price = 200,
 				BuyerUserId = 0,
 				Name = "NonSoldArticle",
@@ -30,7 +30,7 @@ namespace TheShopTests.DAL.Repositories
 			});
 			DbContext.Articles.Add(new Article()
 			{
-				TypeId = 2,
+				ArticleId = 2,
 				Price = 200,
 				BuyerUserId = 100,
 				Name = "SoldArticle",
@@ -45,24 +45,24 @@ namespace TheShopTests.DAL.Repositories
 		public void GetArticleById_ArticleExists_ShouldReturnArticle()
 		{
 			// Arrange
-			int id = 1;
+			int articleId = 1;
 
 			// Act
-			var result = _articleRepository.Get(id);
+			var result = _articleRepository.Get(articleId);
 
 			// Assert			
 			Assert.IsNotNull(result);
-			Assert.AreEqual(id, result.TypeId);			
+			Assert.AreEqual(articleId, result.ArticleId);			
 		}
 
 		[TestMethod]
 		public void GetArticleById_ArticleDoesntExist_ShouldReturnNull()
 		{
 			// Arrange
-			int id = 3;
+			int articleId = 3;
 
 			// Act
-			var result = _articleRepository.Get(id);
+			var result = _articleRepository.Get(articleId);
 
 			// Assert			
 			Assert.IsNull(result);			
@@ -74,25 +74,25 @@ namespace TheShopTests.DAL.Repositories
 		public void GetNonSoldArticleById_NonSoldArticleExists_ShouldReturnArticle()
 		{
 			// Arrange
-			int id = 1;
+			int articleId = 1;
 
 			// Act
-			var result = _articleRepository.GetNonSold(id);
+			var result = _articleRepository.GetNonSold(articleId);
 
 			// Assert			
 			Assert.IsNotNull(result);
 			Assert.IsFalse(result.IsSold);
-			Assert.AreEqual(id, result.TypeId);
+			Assert.AreEqual(articleId, result.ArticleId);
 		}
 
 		[TestMethod]
 		public void GetNonSoldArticleById_SoldArticleExist_ShouldReturnNull()
 		{
 			// Arrange
-			int id = 2;
+			int articleId = 2;
 
 			// Act
-			var result = _articleRepository.GetNonSold(id);
+			var result = _articleRepository.GetNonSold(articleId);
 
 			// Assert			
 			Assert.IsNull(result);
@@ -102,10 +102,10 @@ namespace TheShopTests.DAL.Repositories
 		public void GetNonSoldArticleById_ArticleDoesntExist_ShouldReturnNull()
 		{
 			// Arrange
-			int id = 3;
+			int articleId = 3;
 
 			// Act
-			var result = _articleRepository.GetNonSold(id);
+			var result = _articleRepository.GetNonSold(articleId);
 
 			// Assert			
 			Assert.IsNull(result);
@@ -120,7 +120,7 @@ namespace TheShopTests.DAL.Repositories
 			// Arrange
 			var newArticle = new Article()
 			{			
-				TypeId = 1,
+				ArticleId = 1,
 				Price = 400,
 				BuyerUserId = 0,
 				Name = "testCreatedArticle",
@@ -136,7 +136,7 @@ namespace TheShopTests.DAL.Repositories
 			// Assert			
 			Assert.IsNotNull(createdArticle);
 			Assert.AreEqual(newArticle.Name,createdArticle.Name);
-			Assert.IsTrue(createdArticle.TypeId != 0);
+			Assert.IsTrue(createdArticle.ArticleId != 0);
 			Assert.AreEqual(expectedNumberOfArticles,DbContext.Articles.Count());
 		}
 		#endregion
@@ -146,8 +146,8 @@ namespace TheShopTests.DAL.Repositories
 		public void UpdateArticle_ArticleExists_ArticleUpdated()
 		{
 			// Arrange
-			var typeId = 1;
-			var article = _articleRepository.Get(typeId);
+			var articleId = 1;
+			var article = _articleRepository.Get(articleId);
 
 			article.Name = "Updated test article";
 			
@@ -157,15 +157,15 @@ namespace TheShopTests.DAL.Repositories
 			// Assert			
 			Assert.IsNotNull(updatedArticle);
 			Assert.AreEqual(article.Name, updatedArticle.Name);
-			Assert.AreEqual(article.TypeId,updatedArticle.TypeId);			
+			Assert.AreEqual(article.ArticleId,updatedArticle.ArticleId);			
 		}
 
 		[TestMethod]
 		public void UpdateArticle_ArticleDoesntExist_ArticleNotUpdated()
 		{
 			// Arrange
-			var typeId = 0;
-			var article = _articleRepository.Get(typeId);			
+			var articleId = 0;
+			var article = _articleRepository.Get(articleId);			
 
 			// Act
 			var updatedArticle = _articleRepository.Update(article);			
@@ -180,8 +180,8 @@ namespace TheShopTests.DAL.Repositories
 		public void DeleteArticle_ArticleExists_ArticleDeleted()
 		{
 			// Arrange
-			var typeId = 1;
-			var article = _articleRepository.Get(typeId);
+			var articleId = 1;
+			var article = _articleRepository.Get(articleId);
 
 			var expectedNumberOfArticles = DbContext.Articles.Count() - 1;
 
@@ -197,8 +197,8 @@ namespace TheShopTests.DAL.Repositories
 		public void DeleteArticle_ArticleDoesntExist_ArticleNotDeleted()
 		{
 			// Arrange
-			var typeId = 0;
-			var article = _articleRepository.Get(typeId);
+			var articleId = 0;
+			var article = _articleRepository.Get(articleId);
 
 			var expectedNumberOfArticles = DbContext.Articles.Count();
 

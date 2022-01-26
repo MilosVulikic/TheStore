@@ -11,7 +11,7 @@ namespace TheShop.DAL.Repositories
 
 		public virtual T Get(int id)
 		{
-			return _entities.FirstOrDefault(s => s.TypeId == id);
+			return _entities.FirstOrDefault(s => s.ArticleId == id);
 		}
 
 		public virtual T Create(T entity)

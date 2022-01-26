@@ -4,9 +4,9 @@ namespace TheShop.DAL.Interfaces
 {
 	public interface IArticleRepository
 	{
-		Article Get(int id);
+		Article Get(int articleId);
 
-		Article GetNonSold(int id);
+		Article GetNonSold(int articleId);
 
 		Article Create(Article article);
 

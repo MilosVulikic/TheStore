@@ -39,7 +39,7 @@ namespace TheShopTests.Controllers
 
 			_testArticle = new Article()
 			{
-				TypeId = 1,
+				ArticleId = 1,
 				Name = "Test article",
 				IsSold = false,
 				Price = 200,
@@ -64,7 +64,7 @@ namespace TheShopTests.Controllers
 
 			// Assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual(articleDTO.TypeId, result.TypeId);
+			Assert.AreEqual(articleDTO.ArticleId, result.ArticleId);
 
 		}
 
@@ -137,7 +137,7 @@ namespace TheShopTests.Controllers
 			var result = _shopController.OrderAndSellArticle(id,maxExpectedPrice,buyerId);
 
 			// Assert
-			Assert.AreEqual(articleDTO.TypeId, result.TypeId);
+			Assert.AreEqual(articleDTO.ArticleId, result.ArticleId);
 			_shopServiceMock.Verify(x => x.GetArticleInPriceRange(id, maxExpectedPrice), Times.Once);
 		}
 

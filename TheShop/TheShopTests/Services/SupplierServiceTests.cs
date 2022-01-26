@@ -25,7 +25,7 @@ namespace TheShopTests.Services
 
 			_testArticle = new Article()
 			{
-				TypeId = 1,
+				ArticleId = 1,
 				Name = "Test article from supplier1",
 				Price = 200
 			};
@@ -39,13 +39,13 @@ namespace TheShopTests.Services
 		public void CheckIfArticleInInventory_ArticleWithIdExists_ShouldReturnTrue()
 		{
 			// Arrange
-			var id = 1;			
+			var articleId = 1;			
 			var expectedValue = true;									
 
-			_supplierMock.Setup(x => x.ArticleInInventory(id)).Returns(() => expectedValue);
+			_supplierMock.Setup(x => x.ArticleInInventory(articleId)).Returns(() => expectedValue);
 
 			// Act
-			var result = _supplierService.ArticleInInventory(id, _testSupplier);
+			var result = _supplierService.ArticleInInventory(articleId, _testSupplier);
 
 			// Assert
 			Assert.AreEqual(expectedValue, result);			
@@ -55,14 +55,14 @@ namespace TheShopTests.Services
 		public void CheckIfArticleInInventory_ArticleWithIdDoesntExist_ShouldReturnFalse()
 		{
 			// Arrange
-			var id = 2;			
+			var articleId = 2;			
 			var expectedValue = false;
 
-			_supplierMock.Setup(x => x.ArticleInInventory(id)).Returns(() => expectedValue);
+			_supplierMock.Setup(x => x.ArticleInInventory(articleId)).Returns(() => expectedValue);
 			
 
 			// Act
-			var result = _supplierService.ArticleInInventory(id, _testSupplier);
+			var result = _supplierService.ArticleInInventory(articleId, _testSupplier);
 
 			// Assert
 			Assert.AreEqual(expectedValue, result);			
@@ -75,10 +75,10 @@ namespace TheShopTests.Services
 		public void GetArticleById_ArticleExists_ShouldReturnArticle()
 		{
 			// Arrange
-			int id = 1;
+			int articleId = 1;
 
 			// Act
-			var result = _supplierService.GetArticle(id,_testSupplier);
+			var result = _supplierService.GetArticle(articleId,_testSupplier);
 
 			// Assert
 			Assert.IsNotNull(result);
@@ -89,10 +89,10 @@ namespace TheShopTests.Services
 		public void GetArticleById_ArticleDoesntExist_ShouldReturnNull()
 		{
 			// Arrange
-			int id = 2;
+			int articleId = 2;
 
 			// Act
-			var result = _supplierService.GetArticle(id, _testSupplier);
+			var result = _supplierService.GetArticle(articleId, _testSupplier);
 
 			// Assert
 			Assert.IsNull(result);			
@@ -105,12 +105,12 @@ namespace TheShopTests.Services
 		public void GetArticleFromAnySupplier_ExistsSupplierWithArticleId_ShouldGetArticleFromSupplier()
 		{
 			// Arrange
-			int id = 1;
+			int articleId = 1;
 			var maxExpectedPrice = 200;
 			
 
 			// Act
-			var result = _supplierService.GetArticleFromAnySupplier(id, maxExpectedPrice);
+			var result = _supplierService.GetArticleFromAnySupplier(articleId, maxExpectedPrice);
 
 			// Assert
 			Assert.IsNotNull(result);
@@ -121,12 +121,12 @@ namespace TheShopTests.Services
 		public void GetArticleFromAnySupplier_DoesntExistSupplierWithArticleId_ShouldGetNull()
 		{
 			// Arrange
-			int id = 2;
+			int articleId = 2;
 			var maxExpectedPrice = 200;
 
 
 			// Act
-			var result = _supplierService.GetArticleFromAnySupplier(id, maxExpectedPrice);
+			var result = _supplierService.GetArticleFromAnySupplier(articleId, maxExpectedPrice);
 
 			// Assert
 			Assert.IsNull(result);
@@ -139,11 +139,11 @@ namespace TheShopTests.Services
 		public void GetArticleFromSupplier_ArticleExistsPriceInRange_ShouldReturnArticle()
 		{
 			// Arrange
-			int id = 1;
+			int articleId = 1;
 			var maxExpectedPrice = 200;
 
 			// Act
-			var result = _supplierService.GetArticleFromSupplier(id, maxExpectedPrice, _testSupplier);
+			var result = _supplierService.GetArticleFromSupplier(articleId, maxExpectedPrice, _testSupplier);
 
 			// Assert
 			Assert.IsNotNull(result);
@@ -154,11 +154,11 @@ namespace TheShopTests.Services
 		public void GetArticleFromSupplier_ArticleExistsPriceOutOfRange_ShouldReturnNull()
 		{
 			// Arrange
-			int id = 1;
+			int articleId = 1;
 			var maxExpectedPrice = 199;
 
 			// Act
-			var result = _supplierService.GetArticleFromSupplier(id, maxExpectedPrice,_testSupplier);
+			var result = _supplierService.GetArticleFromSupplier(articleId, maxExpectedPrice,_testSupplier);
 
 			// Assert
 			Assert.IsNull(result);
@@ -168,11 +168,11 @@ namespace TheShopTests.Services
 		public void GetArticleFromSupplier_ArticleDoesntExist_ShouldReturnNull()
 		{
 			// Arrange
-			int id = 2;
+			int articleId = 2;
 			var maxExpectedPrice = 200;
 
 			// Act
-			var result = _supplierService.GetArticleFromSupplier(id, maxExpectedPrice, _testSupplier);
+			var result = _supplierService.GetArticleFromSupplier(articleId, maxExpectedPrice, _testSupplier);
 
 			// Assert
 			Assert.IsNull(result);

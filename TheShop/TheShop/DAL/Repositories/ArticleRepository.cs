@@ -13,7 +13,7 @@ namespace TheShop.DAL.Repositories
 
 		public Article GetNonSold(int id)
 		{
-			return _entities.FirstOrDefault(s => s.TypeId == id && s.IsSold == false);
+			return _entities.FirstOrDefault(s => s.ArticleId == id && s.IsSold == false);
 		}
 	}
 	

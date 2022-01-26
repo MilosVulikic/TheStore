@@ -30,22 +30,22 @@ namespace TheShop.Services
 			}			
 		}
 
-		public bool ArticleInInventory(int id, ISupplier supplier)
+		public bool ArticleInInventory(int articleId, ISupplier supplier)
 		{
-			return supplier.ArticleInInventory(id);
+			return supplier.ArticleInInventory(articleId);
 		}
 
-		public Article GetArticle(int id, ISupplier supplier)
+		public Article GetArticle(int articleId, ISupplier supplier)
 		{			
-			return supplier.GetArticle(id);
+			return supplier.GetArticle(articleId);
 		}
 
-		public Article GetArticleFromAnySupplier(int id, int maxExpectedPrice)
+		public Article GetArticleFromAnySupplier(int articleId, int maxExpectedPrice)
 		{
 			Article article;
 			foreach (var supplier in _suppliers)
 			{
-				article = GetArticleFromSupplier(id, maxExpectedPrice, supplier);
+				article = GetArticleFromSupplier(articleId, maxExpectedPrice, supplier);
 				if (article != null)
 				{
 					return article;
@@ -54,12 +54,12 @@ namespace TheShop.Services
 			return null;
 		}
 
-		public Article GetArticleFromSupplier(int id, int maxExpectedPrice, ISupplier supplier)
+		public Article GetArticleFromSupplier(int articleId, int maxExpectedPrice, ISupplier supplier)
 		{
 			Article tempArticle;
-			if (ArticleInInventory(id,supplier))
+			if (ArticleInInventory(articleId,supplier))
 			{
-				tempArticle = GetArticle(id,supplier);
+				tempArticle = GetArticle(articleId,supplier);
 				if (maxExpectedPrice >= tempArticle.Price)
 				{
 					return tempArticle;
@@ -74,17 +74,13 @@ namespace TheShop.Services
 			switch (supplierName)
 			{
 				case SuppliersFromConfig.Supplier1:
-					return new Supplier1();
-					break;
+					return new Supplier1();					
 				case SuppliersFromConfig.Supplier2:
-					return new Supplier2();
-					break;
+					return new Supplier2();					
 				case SuppliersFromConfig.Supplier3:
-					return new Supplier3();
-					break;
+					return new Supplier3();					
 				default:
-					return new Supplier1();
-					break;
+					return new Supplier1();					
 			}
 		}
 

@@ -26,7 +26,7 @@ namespace TheShopTests.Services
 
 			_testArticle = new Article()
 			{
-				TypeId = 1,
+				ArticleId = 1,
 				Name = "Test article",
 				IsSold = false,
 				Price = 200,
@@ -34,9 +34,9 @@ namespace TheShopTests.Services
 			};
 		}
 
-		private Article GetTestArticleWithId(int id)
+		private Article GetTestArticleWithId(int articleId)
 		{
-			_testArticle.TypeId = id;
+			_testArticle.ArticleId = articleId;
 			return _testArticle;
 		}
 
@@ -46,36 +46,36 @@ namespace TheShopTests.Services
 		public void Get_ArticleExists_ShouldReturnArticle()
 		{
 			// Arrange
-			var id = 1;
-			var article = this.GetTestArticleWithId(id);
+			var articleId = 1;
+			var article = this.GetTestArticleWithId(articleId);
 
 			_articleRepositoryMock
-				.Setup(x => x.Get(id))
+				.Setup(x => x.Get(articleId))
 				.Returns(() => article);
 			// Act
-			var result = _shopService.GetArticle(id);
+			var result = _shopService.GetArticle(articleId);
 			
 			// Assert
 			Assert.IsNotNull(result);
-			_articleRepositoryMock.Verify(x => x.Get(id), Times.Once);
+			_articleRepositoryMock.Verify(x => x.Get(articleId), Times.Once);
 		}
 
 		[TestMethod]
 		public void Get_ArticleDoesntExist_ShouldReturnNull()
 		{
 			// Arrange
-			var id = 1;
+			var articleId = 1;
 
 			_articleRepositoryMock
-				.Setup(x => x.Get(id))
+				.Setup(x => x.Get(articleId))
 				.Returns(() => null);
 
 			// Act
-			var result = _shopService.GetArticle(id);			
+			var result = _shopService.GetArticle(articleId);			
 
 			// Assert
 			Assert.IsNull(result);
-			_articleRepositoryMock.Verify(x => x.Get(id), Times.Once);
+			_articleRepositoryMock.Verify(x => x.Get(articleId), Times.Once);
 		}
 		#endregion
 
@@ -85,63 +85,63 @@ namespace TheShopTests.Services
 		public void GetArticleInPriceRange_ArticleExistsPriceInRange_ShouldReturnArticle()
 		{
 			// Arrange
-			var id = 1;
+			var articleId = 1;
 			var maxExpectedPrice = 200;
 
-			var article = this.GetTestArticleWithId(id);
+			var article = this.GetTestArticleWithId(articleId);
 			article.Price = maxExpectedPrice;
 
 			_articleRepositoryMock
-				.Setup(x => x.Get(id))
+				.Setup(x => x.Get(articleId))
 				.Returns(() => article);
 			
 			// Act
-			var result = _shopService.GetArticleInPriceRange(id,maxExpectedPrice);			
+			var result = _shopService.GetArticleInPriceRange(articleId,maxExpectedPrice);			
 
 			// Assert
 			Assert.IsNotNull(result);
-			_articleRepositoryMock.Verify(x => x.Get(id), Times.Once);
+			_articleRepositoryMock.Verify(x => x.Get(articleId), Times.Once);
 		}
 
 		[TestMethod]
 		public void GetArticleInPriceRange_ArticleExistsPriceOutOfRange_ShouldReturnNull()
 		{
 			// Arrange
-			var id = 1;
+			var articleId = 1;
 			var maxExpectedPrice = 200;
 
-			var article = this.GetTestArticleWithId(id);
+			var article = this.GetTestArticleWithId(articleId);
 			article.Price = maxExpectedPrice + 1;
 
 			_articleRepositoryMock
-				.Setup(x => x.Get(id))
+				.Setup(x => x.Get(articleId))
 				.Returns(() => article);
 
 			// Act
-			var result = _shopService.GetArticleInPriceRange(id, maxExpectedPrice);
+			var result = _shopService.GetArticleInPriceRange(articleId, maxExpectedPrice);
 
 			// Assert
 			Assert.IsNull(result);
-			_articleRepositoryMock.Verify(x => x.Get(id), Times.Once);
+			_articleRepositoryMock.Verify(x => x.Get(articleId), Times.Once);
 		}
 
 		[TestMethod]
 		public void GetArticleInPriceRange_ArticleDoesntExist_ShouldReturnNull()
 		{
 			// Arrange
-			var id = 1;
+			var articleId = 1;
 			var maxExpectedPrice = 200;
 
 			_articleRepositoryMock
-				.Setup(x => x.GetNonSold(id))
+				.Setup(x => x.GetNonSold(articleId))
 				.Returns(() => null);
 
 			// Act
-			var result = _shopService.GetArticleInPriceRange(id, maxExpectedPrice);
+			var result = _shopService.GetArticleInPriceRange(articleId, maxExpectedPrice);
 
 			// Assert
 			Assert.IsNull(result);
-			_articleRepositoryMock.Verify(x => x.Get(id), Times.Once);
+			_articleRepositoryMock.Verify(x => x.Get(articleId), Times.Once);
 		}
 		#endregion
 
@@ -151,20 +151,20 @@ namespace TheShopTests.Services
 		public void OrderArticle_ArticleFoundAmongSuppliers_ShouldCallRepositorySave()
 		{
 			// Arrange
-			var id = 1;
-			var article = this.GetTestArticleWithId(id);
+			var articleId = 1;
+			var article = this.GetTestArticleWithId(articleId);
 			var maxExpectedPrice = 200;
 
 			_articleRepositoryMock
-				.Setup(x => x.Get(id))
+				.Setup(x => x.Get(articleId))
 				.Returns(() => article);
 
 			_supplierServiceMock
-				.Setup(x => x.GetArticleFromAnySupplier(id,maxExpectedPrice))
+				.Setup(x => x.GetArticleFromAnySupplier(articleId,maxExpectedPrice))
 				.Returns(() => article);
 
 			// Act
-			_shopService.OrderArticle(id, maxExpectedPrice);
+			_shopService.OrderArticle(articleId, maxExpectedPrice);
 
 			// Assert
 			_articleRepositoryMock.Verify(x => x.Create(article), Times.Once);
@@ -174,20 +174,20 @@ namespace TheShopTests.Services
 		public void OrderArticle_ArticleNotFoundAmongSuppliers_ShouldNotCallRepositorySave()
 		{
 			// Arrange
-			var id = 1;
-			var article = this.GetTestArticleWithId(id);
+			var articleId = 1;
+			var article = this.GetTestArticleWithId(articleId);
 			var maxExpectedPrice = 200;
 
 			_articleRepositoryMock
-				.Setup(x => x.Get(id))
+				.Setup(x => x.Get(articleId))
 				.Returns(() => article);
 
 			_supplierServiceMock
-				.Setup(x => x.GetArticleFromAnySupplier(id, maxExpectedPrice))
+				.Setup(x => x.GetArticleFromAnySupplier(articleId, maxExpectedPrice))
 				.Returns(() => null);
 
 			// Act
-			_shopService.OrderArticle(id, maxExpectedPrice);
+			_shopService.OrderArticle(articleId, maxExpectedPrice);
 
 			// Assert
 			_articleRepositoryMock.Verify(x => x.Create(article), Times.Never);
@@ -200,18 +200,18 @@ namespace TheShopTests.Services
 		public void SellArticle_NonSoldArticleExists_ShouldCallRepositoryUpdate()
 		{
 			// Arrange			
-			var id = 1;
+			var articleId = 1;
 			var buyerId = 100;
 			var dateBeforeExecution = DateTime.Now;
 
-			var article = GetTestArticleWithId(id);
+			var article = GetTestArticleWithId(articleId);
 
 			_articleRepositoryMock
-				.Setup(x => x.GetNonSold(id))
+				.Setup(x => x.GetNonSold(articleId))
 				.Returns(() => article);
 
 			// Act
-			_shopService.SellArticle(id, buyerId);
+			_shopService.SellArticle(articleId, buyerId);
 
 			
 
@@ -225,17 +225,17 @@ namespace TheShopTests.Services
 		public void SellArticle_ArticleSold_ShouldSetPropertySoldToTrue()
 		{
 			// Arrange			
-			var id = 1;
+			var articleId = 1;
 			var buyerId = 100;			
 
-			var article = GetTestArticleWithId(id);
+			var article = GetTestArticleWithId(articleId);
 
 			_articleRepositoryMock
-				.Setup(x => x.GetNonSold(id))
+				.Setup(x => x.GetNonSold(articleId))
 				.Returns(() => article);
 
 			// Act
-			_shopService.SellArticle(id, buyerId);
+			_shopService.SellArticle(articleId, buyerId);
 
 			// Assert			
 			Assert.AreEqual(true, article.IsSold);			
@@ -245,18 +245,18 @@ namespace TheShopTests.Services
 		public void SellArticle_ArticleSold_ShouldUpdateSoldDateProperty()
 		{
 			// Arrange			
-			var id = 1;
+			var articleId = 1;
 			var buyerId = 100;
 			var dateBeforeExecution = DateTime.Now;
 
-			var article = GetTestArticleWithId(id);
+			var article = GetTestArticleWithId(articleId);
 
 			_articleRepositoryMock
-				.Setup(x => x.GetNonSold(id))
+				.Setup(x => x.GetNonSold(articleId))
 				.Returns(() => article);
 
 			// Act
-			_shopService.SellArticle(id, buyerId);
+			_shopService.SellArticle(articleId, buyerId);
 
 			// Assert			
 			Assert.IsTrue(dateBeforeExecution <= article.SoldDate);			
@@ -266,18 +266,18 @@ namespace TheShopTests.Services
 		public void SellArticle_NonSoldArticleDoesntExist_ShouldNotCallRepositorySave()
 		{
 			// Arrange			
-			var id = 1;
+			var articleId = 1;
 			var buyerId = 100;
 			var dateBeforeExecution = DateTime.Now;
 
-			var article = GetTestArticleWithId(id);
+			var article = GetTestArticleWithId(articleId);
 
 			_articleRepositoryMock
-				.Setup(x => x.GetNonSold(id))
+				.Setup(x => x.GetNonSold(articleId))
 				.Returns(() => null);
 
 			// Act
-			_shopService.SellArticle(id, buyerId);
+			_shopService.SellArticle(articleId, buyerId);
 
 			// Assert
 			_articleRepositoryMock.Verify(x => x.Update(article), Times.Never);

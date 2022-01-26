@@ -5,7 +5,7 @@ namespace TheShop.DAL.Models
 	public class Article
 	{
 		public int ID { get; set; }
-		public int TypeId { get; set; }
+		public int ArticleId { get; set; }
 
 		public string Name { get; set; }
 
