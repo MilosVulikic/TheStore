@@ -2,6 +2,8 @@
 using TheShop.Controllers;
 using TheShop.DAL.Models;
 using TheShop.DAL.Repositories;
+using TheShop.DTOs;
+using TheShop.Mappers;
 using TheShop.Services;
 using TheShop.Services.Interfaces;
 
@@ -11,24 +13,16 @@ namespace TheShop
 	{
 		private static void Main(string[] args)
 		{
-			ShopController shopController = new ShopController(GetShopServiceInstance());   // Client sent requests will be handled by controller
+			ShopController shopController = new ShopController(GetShopServiceInstance(), new ArticleMapper());   // Client sent requests will be handled by controller
 
+			var response = shopController.OrderAndSellArticle(50, 2000, 10);
+			ProcessResponseOrderAndSellArticle(response);
 
-			try
-			{
-				//order and sell
-				shopController.OrderAndSellArticle(50, 20, 10);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex);
-			}
+			response = shopController.GetById(1);
+			ProcessResponseGetById(response);
 
-			var responseGetById = shopController.GetById(1);
-			ProcessResponseGetById(responseGetById);
-			
-			responseGetById = shopController.GetById(12);
-			ProcessResponseGetById(responseGetById);
+			response = shopController.GetById(12);
+			ProcessResponseGetById(response);
 
 			Console.ReadKey();
 		}
@@ -39,13 +33,21 @@ namespace TheShop
 		}
 
 		
-		private static void ProcessResponseGetById(Article article)
+		private static void ProcessResponseGetById(ArticleDTO article)
 		{
 			if (article != null)
 			{
 				Console.WriteLine("Found article with ID: " + article.ID);
 			}
-			Console.WriteLine("Article not found: ");
+			Console.WriteLine("Article not found.");
+		}
+
+		private static void ProcessResponseOrderAndSellArticle(ArticleDTO responseOrderAndSellArticle)
+		{
+			if (responseOrderAndSellArticle != null)
+				Console.WriteLine($"Article {responseOrderAndSellArticle.ID} ordered succesfully");
+			else
+				Console.WriteLine("Article sold out");
 		}
 	}
 }

@@ -40,7 +40,7 @@ namespace TheShop.Services
 			return null;
 		}
 
-		public void OrderArticle(int id, int maxExpectedPrice)
+		public Article OrderArticle(int id, int maxExpectedPrice)
 		{
 			Article article = null;
 			article = _supplierService.GetArticleFromAnySupplier(id, maxExpectedPrice);
@@ -49,9 +49,10 @@ namespace TheShop.Services
 			{
 				_articleRepository.Save(article);
 			}
+			return article;
 		}
 
-		public void SellArticle(int id, int buyerId)
+		public Article SellArticle(int id, int buyerId)
 		{
 			var article = _articleRepository.GetNonSold(id);
 			if (article != null)
@@ -75,7 +76,8 @@ namespace TheShop.Services
 				catch (Exception)
 				{
 				}				
-			}			
+			}
+			return article;
 		}
 
 	}

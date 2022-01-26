@@ -6,7 +6,7 @@ namespace TheShop.Services.Interfaces
 	{
 		Article GetArticle(int id);
 		Article GetArticleInPriceRange(int id, int maxExpectedPrice);
-		void OrderArticle(int id, int maxExpectedPrice);
-		void SellArticle(int id, int buyerId);		
+		Article OrderArticle(int id, int maxExpectedPrice);
+		Article SellArticle(int id, int buyerId);		
 	}
 }

@@ -10,6 +10,8 @@ using TheShop.DAL;
 using TheShop.DAL.Interfaces;
 using TheShop.DAL.Models;
 using TheShop.DAL.Repositories;
+using TheShop.DTOs;
+using TheShop.Mappers;
 using TheShop.Services;
 using TheShop.Services.Interfaces;
 
@@ -23,15 +25,17 @@ namespace TheShopTests.Controllers
 	public class ShopControllerTests
 	{
 		private readonly ShopController _shopController;
+		private readonly IMapper<Article,ArticleDTO> _articleMapper;
 		private readonly Mock<IShopService> _shopServiceMock;
 		
 
-		private Article _testArticle;
+		private Article _testArticle;		
 
 		public ShopControllerTests()
 		{
 			_shopServiceMock = new Mock<IShopService>();
-			_shopController = new ShopController(_shopServiceMock.Object);
+			_articleMapper = new ArticleMapper();
+			_shopController = new ShopController(_shopServiceMock.Object, _articleMapper);
 
 			_testArticle = new Article()
 			{
@@ -42,6 +46,7 @@ namespace TheShopTests.Controllers
 				BuyerUserId = 100,
 				SoldDate = DateTime.Now
 			};
+			
 		}
 
 		#region GetById
@@ -49,8 +54,9 @@ namespace TheShopTests.Controllers
 		public void GetArticleById_OK()
 		{
 			// Arrange
-			var id = 1;			
-			
+			var id = 1;
+			var articleDTO = _articleMapper.ToDto(_testArticle);
+
 			_shopServiceMock.Setup(x => x.GetArticle(id)).Returns(_testArticle);
 
 			// Act
@@ -58,7 +64,7 @@ namespace TheShopTests.Controllers
 
 			// Assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual(_testArticle, result);
+			Assert.AreEqual(articleDTO.ID, result.ID);
 
 		}
 
@@ -83,17 +89,16 @@ namespace TheShopTests.Controllers
 		public void OrderAndSellArticle_ArticleOnStock_ShouldNotCallOrderArticleShouldCallSellArticle()
 		{
 			// Arrange
-			var id = 2;
+			var id = 1;
 			var maxExpectedPrice = 200;
 			var buyerId = 100;
 
-			_shopServiceMock.Setup(x => x.GetArticleInPriceRange(id,maxExpectedPrice)).Returns(() => _testArticle);
-			_shopServiceMock.Setup(x => x.GetArticle(id)).Returns(() => _testArticle);
+			_shopServiceMock.Setup(x => x.GetArticleInPriceRange(id,maxExpectedPrice)).Returns(() => _testArticle);			
 
 			// Act
-			_shopController.OrderAndSellArticle(id, maxExpectedPrice, buyerId);
+			var result = _shopController.OrderAndSellArticle(id, maxExpectedPrice, buyerId);
 
-			// Assert
+			// Assert			
 			_shopServiceMock.Verify(x => x.OrderArticle(id,maxExpectedPrice), Times.Never);
 			_shopServiceMock.Verify(x => x.SellArticle(id, buyerId), Times.Once);			
 		}
@@ -106,8 +111,7 @@ namespace TheShopTests.Controllers
 			var maxExpectedPrice = 200;
 			var buyerId = 100;
 
-			_shopServiceMock.Setup(x => x.GetArticleInPriceRange(id,buyerId)).Returns(() => null);
-			_shopServiceMock.Setup(x => x.GetArticle(id)).Returns(() => null);
+			_shopServiceMock.Setup(x => x.GetArticleInPriceRange(id,buyerId)).Returns(() => null);			
 
 			// Act
 			_shopController.OrderAndSellArticle(id, maxExpectedPrice, buyerId);
@@ -118,19 +122,41 @@ namespace TheShopTests.Controllers
 		}
 
 		[TestMethod]
-		public void OrderAndSellArticle_ArticleExists_OrderedSuccessfully()
+		public void OrderAndSellArticle_ArticleExists_OrderAndSellSuccessfully()
 		{
 			// Arrange
+			var id = 1;
+			var maxExpectedPrice = 200;
+			var buyerId = 100;
+			var articleDTO = _articleMapper.ToDto(_testArticle);
+
+			_shopServiceMock.Setup(x => x.GetArticleInPriceRange(id, maxExpectedPrice)).Returns(() => _testArticle);
+			_shopServiceMock.Setup(x => x.SellArticle(id, buyerId)).Returns(() => _testArticle);
+
 			// Act
+			var result = _shopController.OrderAndSellArticle(id,maxExpectedPrice,buyerId);
+
 			// Assert
+			Assert.AreEqual(articleDTO.ID, result.ID);
+			_shopServiceMock.Verify(x => x.GetArticleInPriceRange(id, maxExpectedPrice), Times.Once);
 		}
 
 		[TestMethod]
-		public void OrderAndSellArticle_ArticleDoenstExist_OrderNotSuccessful()
+		public void OrderAndSellArticle_ArticleDoenstExist_OrderAndSellNotSuccessful()
 		{
 			// Arrange
+			var id = 1;
+			var maxExpectedPrice = 200;
+			var buyerId = 100;
+			
+			_shopServiceMock.Setup(x => x.SellArticle(id, buyerId)).Returns(() => null);
+
 			// Act
+			var result = _shopController.OrderAndSellArticle(id, maxExpectedPrice, buyerId);
+
 			// Assert
+			Assert.IsNull(result);
+			_shopServiceMock.Verify(x => x.GetArticleInPriceRange(id, maxExpectedPrice), Times.Once);
 		}
 		#endregion
 	}

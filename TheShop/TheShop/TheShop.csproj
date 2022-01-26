@@ -53,6 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="DTOs\ArticleDTO.cs" />
+    <Compile Include="Mappers\ArticleMapper.cs" />
+    <Compile Include="Mappers\IMapper.cs" />
     <Compile Include="Services\Interfaces\ISupplierService.cs" />
     <Compile Include="Services\SupplierService.cs" />
     <Compile Include="DAL\ApplicationDbContext.cs" />
