@@ -203,10 +203,10 @@ namespace TheShopTests.DAL.Repositories
 			var expectedNumberOfArticles = DbContext.Articles.Count();
 
 			// Act
-			var updatedArticle = _articleRepository.Delete(article);
+			var deletedArticle = _articleRepository.Delete(article);
 
 			// Assert
-			Assert.IsNull(updatedArticle);
+			Assert.IsNull(deletedArticle);
 			Assert.AreEqual(expectedNumberOfArticles, DbContext.Articles.Count());			
 		}
 		#endregion
