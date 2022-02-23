@@ -8,8 +8,8 @@ namespace TheShop
 	{
 		private static void Main(string[] args)
 		{
-			
-			var shopController = Startup.Instance.Instantiatior<ShopController>();  // Client sent requests will be handled by controller
+
+			var shopController = Startup.Instance.Instantiator<ShopController>();  // Client sent requests will be handled by controller
 
 			var response = shopController.OrderAndSellArticle(50, 2000, 10);
 			ProcessResponseOrderAndSellArticle(response);
