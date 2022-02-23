@@ -17,6 +17,13 @@ namespace TheShopTests
 			Startup.Instance.MapInterfaceToConcreteType(typeof(IBBB),typeof(BBB));
 			Startup.Instance.MapInterfaceToConcreteType(typeof(ICCC), typeof(CCC));
 			Startup.Instance.MapInterfaceToConcreteType(typeof(IDDD), typeof(DDD));
+						
+			
+			// For testing specific constructor (comment to use first defined constructor)
+			Startup.Instance.MapTypeToConstructor(typeof(A), typeof(A).GetConstructor(new Type[] { typeof(B), typeof(C) }));
+			Startup.Instance.MapTypeToConstructor(typeof(B), typeof(B).GetConstructor(new Type[] { typeof(C), typeof(D) }));			
+			Startup.Instance.MapTypeToConstructor(typeof(AAA), typeof(AAA).GetConstructor(new Type[] { typeof(BBB), typeof(CCC) }));
+			Startup.Instance.MapTypeToConstructor(typeof(BBB), typeof(BBB).GetConstructor(new Type[] { typeof(CCC), typeof(DDD) }));
 		}
 
 		// Tests for concrete classes
@@ -42,7 +49,7 @@ namespace TheShopTests
 
 		[TestMethod]
 		public void InstantiatiorCalled_ToplevelConcreteClassDatatypeA_InstanceOfDatatypeAReturned()
-		{
+		{			
 			var a = Startup.Instance.Instantiatior<A>();
 			Assert.IsNotNull(a);
 			Assert.IsInstanceOfType(a, typeof(A));
@@ -57,7 +64,7 @@ namespace TheShopTests
 		}
 
 		
-		// Tests for classes with interfaces
+		// Tests for classes with interfaces default constructors
 		[TestMethod]
 		public void InstantiatiorCalled_MidlevelClassWithInterfacesDatatypeBBB_InstanceOfDatatypeBBBReturned()
 		{
@@ -86,7 +93,6 @@ namespace TheShopTests
 			Assert.IsInstanceOfType(a._bbb.DDD, typeof(DDD));
 		}
 
-
 	}
 
 	#region ConcreteClasses
@@ -96,6 +102,15 @@ namespace TheShopTests
 		public B _b = null;
 		public C _c = null;
 
+		public A()
+		{
+
+		}
+
+		public A(B b)
+		{
+			_b = b;
+		}
 		public A(B b, C c)
 		{
 			_b = b;

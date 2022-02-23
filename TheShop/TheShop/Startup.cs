@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using TheShop.Controllers;
 using TheShop.DAL.Interfaces;
 using TheShop.DAL.Models;
 using TheShop.DAL.Repositories;
@@ -14,6 +16,7 @@ namespace TheShop
 	{
 		private static Startup _instance = null;		
 		Dictionary<Type, Type> _typeMapper = null;
+		Dictionary<Type, ConstructorInfo> _constructorMapper = null;
 
 		public static Startup Instance 
 		{
@@ -33,9 +36,13 @@ namespace TheShop
 			_typeMapper.Add(typeof(ISupplierService), typeof(SupplierService));
 			_typeMapper.Add(typeof(IArticleRepository), typeof(ArticleRepository));
 			_typeMapper.Add(typeof(IMapper<Article,ArticleDTO>), typeof(ArticleMapper));
+		
+			_constructorMapper = new Dictionary<Type, ConstructorInfo>();
+			_constructorMapper.Add(typeof(ShopController), typeof(ShopController).GetConstructor(new Type[] { typeof(IShopService), typeof(IMapper<Article, ArticleDTO>) }));			
+			_constructorMapper.Add(typeof(ShopService), typeof(ShopService).GetConstructor(new Type[] { typeof(IArticleRepository), typeof(ISupplierService) }));			
 		}
 
-
+		
 		/// <summary>
 		/// Instantiate the object of type using parametrized constructror.
 		/// Note: this version works with only one constructor per class
@@ -45,19 +52,30 @@ namespace TheShop
 		public T Instantiatior<T>()
 		{
 			var currentType = GetConcreteType(typeof(T));
-			var ctors = currentType.GetConstructors();
-			var ctor = ctors[0];    // assumes only one ctor per class. TODO: either add mapper that sets proper ctor or "try until make" from first to last ctor
 
+			List<ConstructorInfo> specifiedCtors = GetSpecifiedConstructorsForType(currentType);
+
+			ConstructorInfo[] ctors;
+			if (specifiedCtors == null || specifiedCtors.Count == 0)
+				ctors = currentType.GetConstructors();
+			else
+				ctors = specifiedCtors.ToArray();
+
+			var ctor = ctors[0];
+
+			var ctorNumberOfParameters = ctor.GetParameters().Length;
 			List<object> constructorParameters = new List<object>();
-			if (ctor.GetParameters().Length > 0)
+
+			if (ctorNumberOfParameters > 0)
 			{
-				Console.WriteLine($"[Instantiatior] - Calling Constructor with {ctor.GetParameters().Length} parameters - type: {currentType.Name}");
+				Console.WriteLine($"[Instantiatior] - Calling Constructor with {ctorNumberOfParameters} parameters - type: {currentType.Name}");
 				var parameterTypes = new List<Type>();
 				foreach (var parameter in ctor.GetParameters())
 				{
 					constructorParameters.Add(Instantiatior<T>(parameter.ParameterType));
 				}
 			}
+
 
 			if (constructorParameters.Count > 1)
 				return (T)Activator.CreateInstance(currentType, constructorParameters.ToArray());
@@ -67,14 +85,29 @@ namespace TheShop
 				return (T)Activator.CreateInstance(currentType);
 		}
 
-		
+		private List<ConstructorInfo> GetSpecifiedConstructorsForType(Type currentType)
+		{
+			var specifiedCtor = GetConstructorOfType(currentType);
+			List<ConstructorInfo> specifiedCtors = null;
+			if (specifiedCtor != null)
+				specifiedCtors = new List<ConstructorInfo> { specifiedCtor };
+			return specifiedCtors;
+		}
+
 		private object Instantiatior<T>(Type type)
 		{
-			
 			var currentType = GetConcreteType(type);
-			var ctors = currentType.GetConstructors();
+			List<ConstructorInfo> specifiedCtors = GetSpecifiedConstructorsForType(type);
+
+			ConstructorInfo[] ctors;
+			if (specifiedCtors == null || specifiedCtors.Count == 0)
+				ctors = currentType.GetConstructors();
+			else
+				ctors = specifiedCtors.ToArray();
+
 			var ctor = ctors[0];
 
+			var ctorNumberOfParameters = ctor.GetParameters().Length;			
 			var constructorParameters = new List<object>();
 
 			Console.WriteLine($"[Instantiatior] - Calling Constructor with {ctor.GetParameters().Length} parameters - type: {currentType.Name}");
@@ -125,6 +158,25 @@ namespace TheShop
 				_typeMapper.Add(interfaceType, type);
 			}			
 		}
+
+		public ConstructorInfo GetConstructorOfType(Type type)
+		{
+			
+			if (_constructorMapper.ContainsKey(type))
+			{
+				return _constructorMapper[type];
+			}
+			return null;
+		}
+
+		public void MapTypeToConstructor(Type type, ConstructorInfo constructor)
+		{
+			if (!_constructorMapper.ContainsKey(type))
+			{
+				_constructorMapper.Add(type, constructor);
+			}
+		}
+		
 	}
 
 
