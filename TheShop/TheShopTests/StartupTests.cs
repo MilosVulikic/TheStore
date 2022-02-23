@@ -30,7 +30,7 @@ namespace TheShopTests
 		[TestMethod]
 		public void InstantiatiorCalled_LowerLevelConcreteClassDatatypeC_InstanceOfDatatypeCReturned()
 		{
-			var c = Startup.Instance.Instantiatior<C>();
+			var c = Startup.Instance.Instantiator<C>();
 			Assert.IsNotNull(c);
 			Assert.IsInstanceOfType(c,typeof(C));
 		}
@@ -38,7 +38,7 @@ namespace TheShopTests
 		[TestMethod]
 		public void InstantiatiorCalled_MidlevelConcreteClassDatatypeB_InstanceOfDatatypeBReturned()
 		{
-			var b = Startup.Instance.Instantiatior<B>();
+			var b = Startup.Instance.Instantiator<B>();
 			Assert.IsNotNull(b);			
 			Assert.IsInstanceOfType(b, typeof(B));
 			Assert.IsNotNull(b._c);
@@ -50,7 +50,7 @@ namespace TheShopTests
 		[TestMethod]
 		public void InstantiatiorCalled_ToplevelConcreteClassDatatypeA_InstanceOfDatatypeAReturned()
 		{			
-			var a = Startup.Instance.Instantiatior<A>();
+			var a = Startup.Instance.Instantiator<A>();
 			Assert.IsNotNull(a);
 			Assert.IsInstanceOfType(a, typeof(A));
 			Assert.IsNotNull(a._b);
@@ -68,7 +68,7 @@ namespace TheShopTests
 		[TestMethod]
 		public void InstantiatiorCalled_MidlevelClassWithInterfacesDatatypeBBB_InstanceOfDatatypeBBBReturned()
 		{
-			var b = Startup.Instance.Instantiatior<BBB>();
+			var b = Startup.Instance.Instantiator<BBB>();
 			Assert.IsNotNull(b);
 			Assert.IsInstanceOfType(b, typeof(BBB));
 			Assert.IsNotNull(b.CCC);
@@ -80,7 +80,7 @@ namespace TheShopTests
 		[TestMethod]
 		public void InstantiatiorCalled_ToplevelClassWithInterfacesDatatypeAAA_InstanceOfDatatypeAAAReturned()
 		{
-			var a = Startup.Instance.Instantiatior<AAA>();
+			var a = Startup.Instance.Instantiator<AAA>();
 			Assert.IsNotNull(a);
 			Assert.IsInstanceOfType(a, typeof(AAA));
 			Assert.IsNotNull(a._bbb);
