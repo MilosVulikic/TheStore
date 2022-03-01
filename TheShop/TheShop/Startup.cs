@@ -5,6 +5,7 @@ using TheShop.Controllers;
 using TheShop.DAL.Interfaces;
 using TheShop.DAL.Models;
 using TheShop.DAL.Repositories;
+using TheShop.DAL.UnitOfWork;
 using TheShop.DTOs;
 using TheShop.Mappers;
 using TheShop.Services;
@@ -34,6 +35,7 @@ namespace TheShop
 			_typeMapper.Add(typeof(IShopService),typeof(ShopService));
 			_typeMapper.Add(typeof(ISupplier), typeof(SupplierService));
 			_typeMapper.Add(typeof(ISupplierService), typeof(SupplierService));
+			_typeMapper.Add(typeof(IUnitOfWork), typeof(UnitOfWork));
 			_typeMapper.Add(typeof(IArticleRepository), typeof(ArticleRepository));
 			_typeMapper.Add(typeof(IMapper<Article,ArticleDTO>), typeof(ArticleMapper));
 		

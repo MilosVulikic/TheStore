@@ -17,11 +17,11 @@ namespace TheShopTests.DAL.Repositories
 
 		public ArticleRepositoryTests()
 		{
-			DbContext = new ApplicationDbContext();						
+			DbContext = new ApplicationDbContext();
 			_articleRepository = new ArticleRepository(DbContext);
-			DbContext.Articles.Add(new Article() 
-			{ 
-				ArticleId = 1,
+			DbContext.Articles.Add(new Article()
+			{
+				ID = 1,
 				Price = 200,
 				BuyerUserId = 0,
 				Name = "NonSoldArticle",
@@ -30,7 +30,7 @@ namespace TheShopTests.DAL.Repositories
 			});
 			DbContext.Articles.Add(new Article()
 			{
-				ArticleId = 2,
+				ID = 2,
 				Price = 200,
 				BuyerUserId = 100,
 				Name = "SoldArticle",
@@ -52,7 +52,7 @@ namespace TheShopTests.DAL.Repositories
 
 			// Assert			
 			Assert.IsNotNull(result);
-			Assert.AreEqual(articleId, result.ArticleId);			
+			Assert.AreEqual(articleId, result.ID);
 		}
 
 		[TestMethod]
@@ -65,7 +65,7 @@ namespace TheShopTests.DAL.Repositories
 			var result = _articleRepository.Get(articleId);
 
 			// Assert			
-			Assert.IsNull(result);			
+			Assert.IsNull(result);
 		}
 		#endregion
 
@@ -82,7 +82,7 @@ namespace TheShopTests.DAL.Repositories
 			// Assert			
 			Assert.IsNotNull(result);
 			Assert.IsFalse(result.IsSold);
-			Assert.AreEqual(articleId, result.ArticleId);
+			Assert.AreEqual(articleId, result.ID);
 		}
 
 		[TestMethod]
@@ -116,11 +116,11 @@ namespace TheShopTests.DAL.Repositories
 		#region Create
 		[TestMethod]
 		public void CreateArticle_ArticleAddSucceeded_IncreasedArticleCount()
-		{			
+		{
 			// Arrange
 			var newArticle = new Article()
-			{			
-				ArticleId = 1,
+			{
+				ID = 1,
 				Price = 400,
 				BuyerUserId = 0,
 				Name = "testCreatedArticle",
@@ -128,56 +128,52 @@ namespace TheShopTests.DAL.Repositories
 				SoldDate = DateTime.Now
 			};
 			var expectedNumberOfArticles = DbContext.Articles.Count() + 1;
-
+			
 
 			// Act
-			var createdArticle = _articleRepository.Create(newArticle);
+			_articleRepository.Add(newArticle);
+			DbContext.SaveChanges();
 
-			// Assert			
-			Assert.IsNotNull(createdArticle);
-			Assert.AreEqual(newArticle.Name,createdArticle.Name);
-			Assert.IsTrue(createdArticle.ArticleId != 0);
-			Assert.AreEqual(expectedNumberOfArticles,DbContext.Articles.Count());
+			// Assert						
+			Assert.AreEqual(expectedNumberOfArticles, DbContext.Articles.Count());
 		}
 		#endregion
 
-		#region Update
+		#region Find
 		[TestMethod]
-		public void UpdateArticle_ArticleExists_ArticleUpdated()
+		public void FindArticle_ArticleExists_ArticleFound()
 		{
 			// Arrange
 			var articleId = 1;
 			var article = _articleRepository.Get(articleId);
 
 			article.Name = "Updated test article";
-			
+
 			// Act
-			var updatedArticle = _articleRepository.Update(article);
+			var foundArticle = _articleRepository.Find(x => x.ID == articleId && x.Name == "NonSoldArticle");
 
 			// Assert			
-			Assert.IsNotNull(updatedArticle);
-			Assert.AreEqual(article.Name, updatedArticle.Name);
-			Assert.AreEqual(article.ArticleId,updatedArticle.ArticleId);			
+			Assert.IsTrue(foundArticle.Count() > 0);		
 		}
 
 		[TestMethod]
-		public void UpdateArticle_ArticleDoesntExist_ArticleNotUpdated()
+		public void FindArticle_ArticleDoesntExist_ArticleNotFound()
 		{
 			// Arrange
 			var articleId = 0;
-			var article = _articleRepository.Get(articleId);			
+			var article = _articleRepository.Get(articleId);
 
 			// Act
-			var updatedArticle = _articleRepository.Update(article);			
+			var foundArticle = _articleRepository.Find(x => x.ID == articleId && x.Name == "InvalidName");
 
-			// Assert			
-			Assert.IsNull(updatedArticle);			
+			// Assert
+			Assert.AreEqual(0, foundArticle.Count());
 		}
 		#endregion
 
-		#region Delete
+		#region Remove
 		[TestMethod]
-		public void DeleteArticle_ArticleExists_ArticleDeleted()
+		public void RemoveArticle_ArticleExists_ArticleDeleted()
 		{
 			// Arrange
 			var articleId = 1;
@@ -186,15 +182,15 @@ namespace TheShopTests.DAL.Repositories
 			var expectedNumberOfArticles = DbContext.Articles.Count() - 1;
 
 			// Act
-			var deletedArticle = _articleRepository.Delete(article);
+			_articleRepository.Remove(article);
+			DbContext.SaveChanges();
 
 			// Assert			
-			Assert.IsNotNull(deletedArticle);
-			Assert.AreEqual(expectedNumberOfArticles, DbContext.Articles.Count());			
+			Assert.AreEqual(expectedNumberOfArticles, DbContext.Articles.Count());
 		}
 
 		[TestMethod]
-		public void DeleteArticle_ArticleDoesntExist_ArticleNotDeleted()
+		public void RemoveArticle_ArticleDoesntExist_ArticleNotDeleted()
 		{
 			// Arrange
 			var articleId = 0;
@@ -203,11 +199,15 @@ namespace TheShopTests.DAL.Repositories
 			var expectedNumberOfArticles = DbContext.Articles.Count();
 
 			// Act
-			var deletedArticle = _articleRepository.Delete(article);
+			if (article != null)
+			{
+				_articleRepository.Remove(article);
+				DbContext.SaveChanges();
+			}
 
-			// Assert
-			Assert.IsNull(deletedArticle);
-			Assert.AreEqual(expectedNumberOfArticles, DbContext.Articles.Count());			
+			// Assert			
+			Assert.IsNull(article);
+			Assert.AreEqual(expectedNumberOfArticles, DbContext.Articles.Count());
 		}
 		#endregion
 	}

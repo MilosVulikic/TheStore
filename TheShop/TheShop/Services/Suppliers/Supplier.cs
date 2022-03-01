@@ -19,14 +19,14 @@ namespace TheShop.Services.Suppliers
 
 		public virtual bool ArticleInInventory(int id)
 		{
-			if (_article.ArticleId == id)			
+			if (_article.ID == id)			
 				return true;			
 			return false; 
 		}
 
 		public virtual Article GetArticle(int id)
 		{
-			if (_article.ArticleId == id)			
+			if (_article.ID == id)			
 				return _article;			
 			return null;
 		}

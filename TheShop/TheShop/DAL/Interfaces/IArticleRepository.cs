@@ -2,16 +2,16 @@
 
 namespace TheShop.DAL.Interfaces
 {
-	public interface IArticleRepository
+	public interface IArticleRepository : IRepository<Article>
 	{
-		Article Get(int articleId);
+		//Article Get(int articleId);
 
 		Article GetNonSold(int articleId);
 
-		Article Create(Article article);
+		//Article Create(Article article);
 
-		Article Update(Article article);
+		//Article Update(Article article);
 
-		Article Delete(Article article);
+		//Article Delete(Article article);
 	}
 }

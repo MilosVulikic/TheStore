@@ -10,19 +10,20 @@ namespace TheShop.Services
 	public class ShopService : IShopService
 	{
 		private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-		IArticleRepository _articleRepository;
+		//IArticleRepository _articleRepository;
+		IUnitOfWork _unitOfWork;
 		ISupplierService _supplierService;						
 
-		public ShopService(IArticleRepository articleRepository, ISupplierService supplierService)
+		public ShopService(IUnitOfWork unitOfWork, ISupplierService supplierService)
 		{
-			_articleRepository = articleRepository;						
+			_unitOfWork = unitOfWork;				
 			_supplierService = supplierService;			
 		}
 
 		
 		public Article GetArticle(int articleId)
 		{
-			var article = _articleRepository.Get(articleId);
+			var article = _unitOfWork.Articles.Get(articleId);	// umjesto articleId moracu konkretni Id da koristim    ILI - findFirst
 			if (article != null)
 				_logger.Debug($"Found article with ArticleId: {articleId}");
 			else
@@ -34,7 +35,7 @@ namespace TheShop.Services
 		{
 			_logger.Debug($"Getting from local stock Article with ArticleId: {articleId}, with price less than: {maxExpectedPrice}");
 
-			var article = _articleRepository.Get(articleId);
+			var article = _unitOfWork.Articles.Get(articleId);
 			if (article != null && article.Price <= maxExpectedPrice)			
 				return article;
 			
@@ -48,25 +49,29 @@ namespace TheShop.Services
 			Article article = null;
 			article = _supplierService.GetArticleFromAnySupplier(articleId, maxExpectedPrice);
 
-			if (article != null)			
-				_articleRepository.Create(article);
-				
+			if (article != null)
+			{
+				_unitOfWork.Articles.Add(article);
+				 _unitOfWork.Complete();
+			}
+
 			return article;
 		}
 
-		public Article SellArticle(int articleId, int buyerId)
+		public Article SellArticle(int id, int buyerId)
 		{
-			_logger.Debug($"Trying to sell article with ArticleId: {articleId}");
-			var article = _articleRepository.GetNonSold(articleId);
+			_logger.Debug($"Trying to sell article with ArticleId: {id}");
+			var article = _unitOfWork.Articles.GetNonSold(id);
 			if (article != null)
 			{				
 				article.IsSold = true;
 				article.SoldDate = DateTime.Now;
 				article.BuyerUserId = buyerId;
-				
-				article = _articleRepository.Update(article);
+
+				//article = _articleRepository.Update(article);
+				_unitOfWork.Complete();
 				if (article != null)
-					_logger.Debug($"Sold article with ArticleId: {articleId}");
+					_logger.Debug($"Sold article with ArticleId: {id}");
 			}
 			
 			return article;

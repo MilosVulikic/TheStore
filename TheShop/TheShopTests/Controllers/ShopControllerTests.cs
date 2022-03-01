@@ -39,7 +39,7 @@ namespace TheShopTests.Controllers
 
 			_testArticle = new Article()
 			{
-				ArticleId = 1,
+				ID = 1,
 				Name = "Test article",
 				IsSold = false,
 				Price = 200,

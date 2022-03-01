@@ -18,28 +18,28 @@ namespace TheShop.Controllers
 			_articleMapper = mapper;
 		}
 
-		public ArticleDTO OrderAndSellArticle(int articleId, int maxExpectedPrice, int buyerId)
+		public ArticleDTO OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId)
 		{
-			_logger.Info($"Starting OrderAndSellArticle for ArticleId: {articleId}, maxExpectedPrice: {maxExpectedPrice}, buyerId: {buyerId}");
+			_logger.Info($"Starting OrderAndSellArticle for ArticleId: {id}, maxExpectedPrice: {maxExpectedPrice}, buyerId: {buyerId}");
 
-			var article = _shopService.GetArticleInPriceRange(articleId, maxExpectedPrice);
+			var article = _shopService.GetArticleInPriceRange(id, maxExpectedPrice);
 			if (article is null)
-				article = _shopService.OrderArticle(articleId, maxExpectedPrice);
+				article = _shopService.OrderArticle(id, maxExpectedPrice);
 				
-			article = _shopService.SellArticle(articleId, buyerId);
+			article = _shopService.SellArticle(id, buyerId);
 				
 			if (article != null) 
 			{
-				_logger.Info($"OrderAndSellArticle successful for ArticleId: {articleId}, maxExpectedPrice: {maxExpectedPrice}, buyerId: {buyerId}");
+				_logger.Info($"OrderAndSellArticle successful for ArticleId: {id}, maxExpectedPrice: {maxExpectedPrice}, buyerId: {buyerId}");
 				return _articleMapper.ToDto(article);
 			}								
 			return null;
 		}
 
-		public ArticleDTO GetById(int articleId)
+		public ArticleDTO GetById(int id)
 		{
-			_logger.Info($"Getting Article with ArticleId: {articleId}");
-			var article = _shopService.GetArticle(articleId);
+			_logger.Info($"Getting Article with ArticleId: {id}");
+			var article = _shopService.GetArticle(id);
 			if (article != null)			
 				return _articleMapper.ToDto(article);			
 				

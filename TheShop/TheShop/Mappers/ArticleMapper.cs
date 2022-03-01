@@ -9,7 +9,7 @@ namespace TheShop.Mappers
 		{
 			return new ArticleDTO()
 			{
-				ArticleId = model.ArticleId,
+				ArticleId = model.ID,
 				Name = model.Name,
 				Price = model.Price
 			};
@@ -19,7 +19,7 @@ namespace TheShop.Mappers
 		{
 			return new Article()
 			{
-				ArticleId = dto.ArticleId,
+				ID = dto.ArticleId,
 				Name = dto.Name,
 				Price = dto.Price
 			};

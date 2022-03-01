@@ -8,7 +8,7 @@ namespace TheShop.Services.Suppliers
 		public Supplier2() 
 			: base(new Article()
 			{
-				ArticleId = 100,
+				ID = 1,
 				Name = "Article from supplier2",
 				Price = 459
 			})

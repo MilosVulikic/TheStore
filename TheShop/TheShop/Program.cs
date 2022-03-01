@@ -8,19 +8,18 @@ namespace TheShop
 	{
 		private static void Main(string[] args)
 		{
-
 			var shopController = Startup.Instance.Instantiator<ShopController>();  // Client sent requests will be handled by controller
 
-			var response = shopController.OrderAndSellArticle(50, 2000, 10);
+			var response = shopController.OrderAndSellArticle(1, 2000, 10);
 			ProcessResponseOrderAndSellArticle(response);
 
 			response = shopController.GetById(1);
 			ProcessResponseGetById(response);
 
-			response = shopController.GetById(50);
+			response = shopController.GetById(2);
 			ProcessResponseGetById(response);
 
-			response = shopController.GetById(12);
+			response = shopController.GetById(3);
 			ProcessResponseGetById(response);
 
 			Console.ReadKey();
@@ -43,10 +42,18 @@ namespace TheShop
 				Console.WriteLine("Article sold out");
 		}
 		#endregion
+
 	}
 
+	public interface IAgentBase
+	{
+		/// <summary>
+		/// Source key to identify which back-end system this module communicates with.
+		/// Must conform with values in [Config].[BackEndSourceKeys]
+		/// </summary>
+		string SourceKey { get; }
+	}
 
-	
 
 
 }

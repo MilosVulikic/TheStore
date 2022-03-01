@@ -36,7 +36,7 @@ namespace TheShopTests.MapperTests
             var model = _articleMapper.ToEntity(dto);
 
             // Assert
-            Assert.AreEqual(dto.ArticleId, model.ArticleId);
+            Assert.AreEqual(dto.ArticleId, model.ID);
             Assert.AreEqual(dto.Name, model.Name);
             Assert.AreEqual(dto.Price, model.Price);
         }
@@ -46,8 +46,8 @@ namespace TheShopTests.MapperTests
         {
             // Arrange
             var model = new Article
-            {                
-                ArticleId = 1,
+            {
+                ID = 1,
                 Name = "Test article",
                 IsSold = true,
                 Price = 200,
@@ -59,7 +59,7 @@ namespace TheShopTests.MapperTests
             var dto = _articleMapper.ToDto(model);
 
             // Assert
-            Assert.AreEqual(model.ArticleId, dto.ArticleId);
+            Assert.AreEqual(model.ID, dto.ArticleId);
             Assert.AreEqual(model.Name, dto.Name);
             Assert.AreEqual(model.Price, dto.Price);
         }
