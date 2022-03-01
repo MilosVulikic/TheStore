@@ -9,8 +9,7 @@ namespace TheShop.Services
 {
 	public class ShopService : IShopService
 	{
-		private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-		//IArticleRepository _articleRepository;
+		private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);		
 		IUnitOfWork _unitOfWork;
 		ISupplierService _supplierService;						
 
@@ -23,7 +22,7 @@ namespace TheShop.Services
 		
 		public Article GetArticle(int articleId)
 		{
-			var article = _unitOfWork.Articles.Get(articleId);	// umjesto articleId moracu konkretni Id da koristim    ILI - findFirst
+			var article = _unitOfWork.Articles.Get(articleId);
 			if (article != null)
 				_logger.Debug($"Found article with ArticleId: {articleId}");
 			else
@@ -67,8 +66,7 @@ namespace TheShop.Services
 				article.IsSold = true;
 				article.SoldDate = DateTime.Now;
 				article.BuyerUserId = buyerId;
-
-				//article = _articleRepository.Update(article);
+				
 				_unitOfWork.Complete();
 				if (article != null)
 					_logger.Debug($"Sold article with ArticleId: {id}");
